@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<profilesXml xmlns="http://maven.apache.org/PROFILES/1.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/PROFILES/1.0.0 http://maven.apache.org/xsd/profiles-1.0.0.xsd">
+   <profiles>
+       
+        <!-- Jetty 7  - would need rewrite of includes - org.eclipse.jetty -->
+        <profile>
+            <id>jetty7</id>
+            <properties>
+                <jetty.version>7.2.2.v20101205</jetty.version>
+            </properties>
+            <dependencies>
+                <dependency>
+                    <groupId>org.eclipse.jetty</groupId>
+                    <artifactId>jetty-server</artifactId>
+                    <version>${jetty.version}</version>
+                </dependency>
+                <dependency>
+                    <groupId>org.eclipse.jetty</groupId>
+                    <artifactId>jetty-util</artifactId>
+                    <version>${jetty.version}</version>
+                </dependency>
+                <dependency>
+                    <groupId>org.eclipse.jetty</groupId>
+                    <artifactId>jetty-webapp</artifactId>
+                    <version>${jetty.version}</version>
+                </dependency>
+                <dependency>
+                    <groupId>org.eclipse.jetty</groupId>
+                    <artifactId>jetty-servlet</artifactId>
+                    <version>${jetty.version}</version>
+                </dependency>
+                <dependency>
+                    <groupId>org.eclipse.jetty</groupId>
+                    <artifactId>jetty-servlets</artifactId>
+                    <version>${jetty.version}</version>
+                </dependency>
+            </dependencies>
+        </profile>
+
+   </profiles>
+   
+   <!--activeProfiles>
+       <activeProfile>profile1</activeProfile>
+   </activeProfiles-->
+</profilesXml>

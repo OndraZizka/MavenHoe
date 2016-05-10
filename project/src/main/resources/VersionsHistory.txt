@@ -1,0 +1,2 @@
+1.1.0:
+ * Includes and excludes implemented -  -i and -e params. CLI changed accordingly.

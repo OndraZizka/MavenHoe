@@ -1,0 +1,57 @@
+
+# EAP/JDBC support matrix: https://docspace.corp.redhat.com/docs/DOC-16080
+# mvn help:effective-pom -P hsqldb,db2-97,db2-91,mysql50,mysql51,oracle10g,oracle11g,oracle11gRAC,postgresql82,postgresql83,postgresql82-jdbc3,postgresql83-jdbc3,mssql2005,mssql2008,sybase15,sybase155
+# mvn dependency:tree -P hsqldb,db2-97,db2-91,mysql50,mysql51,oracle10g,oracle11g,oracle11gRAC,postgresql82,postgresql83,postgresql82-jdbc3,postgresql83-jdbc3,mssql2005,mssql2008,sybase15,sybase155
+
+# sybase http://qafiler.bos.redhat.com/testkits/ISV/SYBASE/ASE/license/ASE_licenses-expire20110331.jar
+
+# Format:
+# <real-file-path>       <groupId>                  <artifactId>       <version>     <virtual-file-name>
+# jboss-managed.jar      org/jboss/man/             jboss-managed      2.1.0.SP1     jboss-managed-2.1.0.SP1.jar
+
+
+#EAP/4.3.9/db2-91/jdbc4/db2jcc_license_cu.jar  com.ibm     db2jcc_license_cu   3.57.86   db2jcc_license_cu.jar
+#EAP/4.3.9/db2-97/jdbc4/db2jcc.jar             com.ibm     db2jcc4             3.58.82   db2jcc.jar
+#EAP/4.3.9/oracle10g/jdbc4/ojdbc14.jar         com.oracle  ojdbc14             10.2.0.4  ojdbc14.jar
+
+
+./db2-97/jdbc3/db2jcc.jar   com.ibm db2jcc   3.1.57    db2jcc.jar
+./db2-97/jdbc4/db2jcc4.jar  com.ibm db2jcc4  3.58.82   db2jcc4.jar
+
+#./mssql2005/jdbc3/sqljdbc.jar     sqljdbc.jar
+#./mssql2005/jdbc4/sqljdbc4.jar    com.microsoft.sqlserver msjdbc 4 2.0.1008.2   msjdbc-2.0.1008.2-4.jar
+#./mssql2008/jdbc3/sqljdbc.jar     sqljdbc.jar
+./mssql2008/jdbc4/sqljdbc4.jar     com.microsoft.sqlserver msjdbc 4 2.0.1008.2   msjdbc-2.0.1008.2-4.jar
+
+#./mysql50/jdbc3/mysql-connector-java-5.0.8-bin.jar  mysql mysql-connector-java  5.0.8  mysql-connector-java-5.0.8-bin.jar
+./mysql50/jdbc4/mysql-connector-java-5.0.8-bin.jar  mysql mysql-connector-java  5.0.8  mysql-connector-java-5.0.8-bin.jar
+#./mysql51/jdbc3/mysql-connector-java-5.1.13-bin.jar mysql mysql-connector-java  5.1.13  mysql-connector-java-5.1.12-bin.jar
+./mysql51/jdbc4/mysql-connector-java-5.1.13-bin.jar mysql mysql-connector-java  5.1.13  mysql-connector-java-5.1.12-bin.jar
+
+#./oracle10g/jdbc3/ojdbc14.jar       ojdbc14.jar
+./oracle10g/jdbc4/ojdbc14.jar        com.oracle ojdbc14 10.2.0.4     ojdbc14.jar
+
+#./oracle11gR1/jdbc3/ojdbc5.jar      ojdbc5.jar
+#./oracle11gR1/jdbc4/ojdbc6.jar      com.oracle  ojdbc6 11.2.0.1.0   ojdbc6-11.2.0.1.0.jar
+#./oracle11gR1RAC/jdbc3/ojdbc5.jar   ojdbc5.jar
+#./oracle11gR1RAC/jdbc4/ojdbc6.jar   com.oracle  ojdbc6 11.2.0.1.0   ojdbc6-11.2.0.1.0.jar
+#./oracle11gR2/jdbc3/ojdbc5.jar      ojdbc5.jar
+#./oracle11gR2/jdbc4/ojdbc6.jar      com.oracle  ojdbc6 11.2.0.1.0   ojdbc6-11.2.0.1.0.jar
+#./oracle11gR2RAC/jdbc3/ojdbc5.jar   ojdbc5.jar
+./oracle11gR2RAC/jdbc4/ojdbc6.jar    com.oracle  ojdbc6 11.2.0.1.0   ojdbc6-11.2.0.1.0.jar
+
+#./postgresql82/jdbc3/postgresql-8.2-510.jdbc3.jar      postgresql-8.2-510.jdbc3.jar
+#./postgresql82/jdbc4/postgresql-8.2-510.jdbc4.jar      postgresql postgresql  @jdbc4  8.2-510  postgresql-8.2-510.jdbc4.jar
+./postgresql82/jdbc4/postgresql-8.2-510.jdbc4.jar      postgresql postgresql  8.2-510  postgresql-8.2-510.jdbc4.jar
+#./postgresql83/jdbc3/postgresql-8.3-605.jdbc3.jar      postgresql-8.3-605.jdbc3.jar
+./postgresql83/jdbc4/postgresql-8.3-605.jdbc4.jar      postgresql postgresql  8.3-605  postgresql-8.3-605.jdbc4.jar
+#./postgresql84/jdbc3/postgresql-8.4-702.jdbc3.jar      postgresql-8.4-702.jdbc3.jar
+#./postgresql84/jdbc4/postgresql-8.4-702.jdbc4.jar      postgresql-8.4-702.jdbc4.jar
+
+
+
+#./sybase15/jdbc3/jconn3.jar            jconn3.jar
+#./sybase15/jdbc4/jconn4-26502.jar    com.sybase jconnect 6.0.5_26564  jconn4-26502.jar <- Juca has this, HBN wants newer.
+./sybase15/jdbc4/jconn4-26502.jar     com.sybase jconnect 6.0.5_26564  jconnect-6.0.5_26564.jar
+
+

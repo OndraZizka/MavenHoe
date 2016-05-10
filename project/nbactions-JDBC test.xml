@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<actions>
+        <action>
+            <actionName>run</actionName>
+            <goals>
+                <goal>process-classes</goal>
+                <goal>org.codehaus.mojo:exec-maven-plugin:1.1.1:exec</goal>
+            </goals>
+            <properties>
+                <exec.classpathScope>runtime</exec.classpathScope>
+                <exec.args>-DMavenhoe.log.level=INFO -classpath %classpath org.jboss.qa.mavenhoe.MavenHoeApp -logProfile=default -map -fakepoms src/test/data/drivers-map.txt -map src/test/data/eap51-mapping.txt  -i -fakepoms /home/ondra/work/hbn/JDBC-store/jdbc-drivers-eap/5.1.0 -sp</exec.args>
+                <exec.executable>java</exec.executable>
+            </properties>
+        </action>
+        <action>
+            <actionName>debug</actionName>
+            <goals>
+                <goal>process-classes</goal>
+                <goal>org.codehaus.mojo:exec-maven-plugin:1.1.1:exec</goal>
+            </goals>
+            <properties>
+                <exec.classpathScope>runtime</exec.classpathScope>
+                <exec.args>-Xdebug -Xrunjdwp:transport=dt_socket,server=n,address=${jpda.address} -DMavenhoe.log.level=INFO -classpath %classpath org.jboss.qa.mavenhoe.MavenHoeApp -logProfile=default -map -fakepoms src/test/data/drivers-map.txt -map src/test/data/eap51-mapping.txt  -i -fakepoms /home/ondra/work/hbn/JDBC-store/jdbc-drivers-eap/5.1.0 -sp</exec.args>
+                <jpda.listen>true</jpda.listen>
+                <exec.executable>java</exec.executable>
+            </properties>
+        </action>
+        <action>
+            <actionName>profile</actionName>
+            <goals>
+                <goal>process-classes</goal>
+                <goal>org.codehaus.mojo:exec-maven-plugin:1.1.1:exec</goal>
+            </goals>
+            <properties>
+                <exec.args>${profiler.args} -DMavenhoe.log.level=INFO -classpath %classpath org.jboss.qa.mavenhoe.MavenHoeApp -logProfile=default -map -fakepoms src/test/data/drivers-map.txt -map src/test/data/eap51-mapping.txt  -i -fakepoms /home/ondra/work/hbn/JDBC-store/jdbc-drivers-eap/5.1.0 -sp</exec.args>
+                <profiler.action>profile</profiler.action>
+                <exec.executable>${profiler.java}</exec.executable>
+            </properties>
+        </action>
+    </actions>

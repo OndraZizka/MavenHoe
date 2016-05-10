@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<settings>
+
+  <localRepository>./m2repo</localRepository>
+
+  <profiles>
+
+    <profile>
+      <id>jbossqa-repo</id>
+      <activation><activeByDefault>true</activeByDefault></activation>
+      <repositories>
+        <!--JBoss QA proxy & repository -->
+        <repository>
+          <id>jbossqa-repo</id>
+          <url>http://nexus.qa.jboss.com:8081/nexus/content/groups/public-all</url>
+          <releases>
+            <enabled>true</enabled>
+          </releases> <!-- Default: true -->
+          <snapshots>
+            <enabled>true</enabled>
+          </snapshots> <!-- Default: false -->
+        </repository>
+      </repositories>
+    </profile>
+
+    <profile>
+        <id>jboss-nexus</id>
+        <activation><activeByDefault>true</activeByDefault></activation>
+        <repositories>
+            <repository>
+                <id>jboss-maven-repo</id>
+                <url>http://repository.jboss.org/nexus/content/groups/public-jboss</url>
+            </repository>
+        </repositories>
+        <pluginRepositories>
+            <pluginRepository>
+                <id>jboss-maven-repo</id>
+                <url>http://repository.jboss.org/nexus/content/groups/public-jboss</url>
+            </pluginRepository>
+        </pluginRepositories>
+    </profile>
+
+    <profile>
+      <id>jboss-developer-repository</id>
+      <activation><activeByDefault>false</activeByDefault></activation>
+      <repositories>
+        <repository>
+          <id>jboss-developer-repository-group</id>
+          <name>JBoss.org Developer Repository Group</name>
+          <url>https://repository.jboss.org/nexus/content/groups/developer</url>
+          <releases>
+            <enabled>true</enabled>
+          </releases>
+          <snapshots>
+            <enabled>true</enabled>
+          </snapshots>
+        </repository>
+      </repositories>
+      <pluginRepositories>
+        <pluginRepository>
+          <id>jboss-developer-repository-group</id>
+          <name>JBoss.org Developer Repository Group</name>
+          <url>https://repository.jboss.org/nexus/content/groups/developer</url>
+          <releases>
+            <enabled>true</enabled>
+          </releases>
+          <snapshots>
+            <enabled>true</enabled>
+          </snapshots>
+        </pluginRepository>
+      </pluginRepositories>
+    </profile>
+
+
+    <profile>
+      <id>brno-repo</id>
+
+      <activation><activeByDefault>false</activeByDefault></activation>
+
+      <!-- Artifacts (jars, wars, ...). -->
+      <repositories>
+
+        <!-- Local Brno proxy -->
+        <!-- Your ID to refer to in pom.xml.
+        <repository>
+          <id>brno-proxy</id>
+          <url>http://jawa13.englab.brq.redhat.com:1212/nexus/content/groups/public-all</url>
+          <releases>true</releases>
+          <snapshots>false</snapshots>
+        </repository>
+        -->
+
+
+        <!-- Local Brno proxy - releases
+        <repository>
+          <id>brno-proxy-releases</id>
+          <url>http://jawa13.englab.brq.redhat.com:1212/nexus/content/repositories/releases</url>
+        </repository>
+         -->
+
+      </repositories>
+      
+      <!-- Maven plugins. -->
+      <pluginRepositories>
+        <pluginRepository>
+          <id>brno-proxy-plugins</id> <!-- Your ID to refer to in pom.xml. -->
+          <url>http://jawa13.englab.brq.redhat.com:1212/nexus/content/groups/public-all</url>
+        </pluginRepository>
+      </pluginRepositories>
+
+    </profile>
+
+
+
+    <!-- Embedded Jopr -->
+
+    <profile>
+      <id>jboss4.2</id>
+      <properties>
+        <JBOSS_HOME>/home/ondra/work/JOPRembedded/jboss-eap-4.3/jboss-as</JBOSS_HOME>
+        <JAVA_HOME>/home/ondra/sw/java/jdk/jdk1.5.0_17</JAVA_HOME>
+      </properties>
+    </profile>
+	
+    <profile>
+      <id>jboss5x</id>
+      <properties>
+        <JBOSS_HOME>/home/ondra/work/JOPRembedded/JBOSS_HOME</JBOSS_HOME>
+        <!-- <JAVA_HOME>/usr/lib/jvm/java-6-sun</JAVA_HOME> -->
+      	<JAVA_HOME>/usr/lib/jvm/java-6-openjdk</JAVA_HOME>
+      </properties>
+      <repositories>
+        <repository>
+          <id>internal</id>
+          <name>Internal Repository</name>
+          <url>http://jon01.qa.atl2.redhat.com:8042/m2-repo/</url>
+        </repository>
+      </repositories>
+    </profile>
+
+
+
+
+
+    <profile>
+      <id>set-jdks-and-homes</id>
+
+      <activation>
+        <activeByDefault>false</activeByDefault>
+      </activation>
+
+      <properties>
+        <cargo.java.home.1_5>/home/ondra/sw/java/jdk/jdk1.5.0_17</cargo.java.home.1_5>
+        <!--<cargo.java.home.1_6>/home/ondra/sw/java/jdk/</cargo.java.home.1_6>-->
+      </properties>
+    </profile>
+
+
+
+    <profile>
+      <id>jtexy</id>
+      <activation>
+        <property><name>project.name</name><value>jtexy</value></property>
+      </activation>
+      <properties>
+        <!--<jtexy.phptexy.ts.dir>c:/java/JTexy/JTexy-google/src/phptexy20/testsuite</jtexy.phptexy.ts.dir>-->
+        <jtexy.phptexy.ts.dir>/home/ondra/work/JTexy/svn-google/trunk/src/phptexy20/testsuite</jtexy.phptexy.ts.dir>
+        <jtexy.jtexy.ts.dir>/home/ondra/work/JTexy/svn-google/trunk/src/test/resources/cz/dynawest/jtexy/ts</jtexy.jtexy.ts.dir>
+      </properties>
+    </profile>
+
+  </profiles>
+
+
+
+  <!-- Credentials -->
+  <servers>
+    <server>
+      <id>jboss-qa-releases</id>
+      <username>ozizka@redhat.com</username>
+      <password>pdultr00</password>
+    </server>
+    <server>
+      <id>jboss-qa-snapshots</id>
+      <username>ozizka@redhat.com</username>
+      <password>pdultr00</password>
+    </server>
+
+    <!-- non-public pohlidame.cz artifacts -->
+    <server>
+      <id>rapidlime-pohlidame</id>
+      <username>ondra</username>
+      <password>d32E2*par</password>
+    </server>
+    <server>
+      <id>rapidlime-central</id>
+      <username>repo1</username>
+      <password>Dgf23*987</password>
+    </server>
+
+  </servers>
+
+
+</settings>

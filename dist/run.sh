@@ -1,0 +1,1 @@
+java  -DSTOP.PORT=8080 -DSTOP.KEY=aaa -jar 1.1.0/Mavenhoe.jar -map /home/ondra/work/Mavenhoe/trunk/src/test/resources/extracted-metadata.txt -i /home/ondra/work/hbn/runner/EAP-5.1/EAP-510/common /home/ondra/work/hbn/runner/EAP-5.1/EAP-510/client -ipom /home/ondra/work/hbn/runner/EAP-5.1/work-space/src/core

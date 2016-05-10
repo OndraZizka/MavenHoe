@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+   <modelVersion>4.0.0</modelVersion>
+
+   <groupId>org.postgresql</groupId>
+   <artifactId>postgresql</artifactId>
+   
+   <version>8.2-510</version>
+   <packaging>pom</packaging>
+   
+   <name>postgresql-8.2-510.pom</name>
+   <description>JarInfo{ grp: org.mygroup.qa, name: MyName, ver: 0.0.0-VER, fileName: fileName.jar, pack: pack, path: some/path.jar, base: /base/dir }</description>
+   <url>http://localhost:17283/jars?mvnPath=/postgresql/postgresql/8.2-510/postgresql-8.2-510.pom</url>
+</project>
