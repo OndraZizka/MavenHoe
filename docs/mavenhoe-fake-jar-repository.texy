@@ -1,0 +1,174 @@
+
+
+Mavenhoe - fake Maven repository from .jar's in local  directory tree
+*********************************************************************
+
+
+Purpose
+=======
+
+QA dept often needs to run a maven project with "faked" dependencies - the actual .jar files must be taken from a product's distribution, which are not in any Maven repository (like EAP's .zip or RPM distribution).
+
+This utility is one of the ways to solve this problem. It scans a given directory for .jar files, indexes them, and opens a server acting as a Maven repository, in the sense of serving the indexed .jar files.
+
+Which file will be server is determined by match of strings in the provided Maven URL path (localhost:17283/<group>/<artifact>/<version>/<filename>.jar). This algorithm is a matter of future improvement. Using static mapping file is a possibility.
+
+
+
+Usage
+=====
+
+Configuration
+-------------
+
+Prepare a mapping file, see e.g. extracted-metadata.txt.zip  attached to https://docspace.corp.redhat.com/docs/DOC-53554 :
+
+/--code plain .[brush:]
+jboss-managed.jar      org/jboss/man/             jboss-managed      2.1.0.SP1     jboss-managed-2.1.0.SP1.jar
+getopt.jar             gnu-getopt/                getopt             1.0.12-brew   getopt-1.0.12-brew.jar
+jboss-kernel.jar       org/jboss/microcontainer/  jboss-kernel       2.0.6.GA      jboss-kernel-2.0.6.GA.jar
+jboss-logging-spi.jar  org/jboss/logging/         jboss-logging-spi  2.1.0.GA      jboss-logging-spi-2.1.0.GA.jar
+...
+\--
+
+The  first column is the filename in the .zip;  Then groupId (with either  slashes or dots), artifactId, version, artifact file name, respectively.
+
+You're  expected to check the first column against the .zip file.
+
+This is  a temporary solution, later this info will be acquired from an online  database.
+
+
+
+Maven project preparation
+-------------------------
+
+Disable the central repository; see http://community.jboss.org/thread/89912 . One (IMO the best) option is to override it in `pom.xml`:
+
+/--code xml .[brush:]
+    <repository>
+      <id>central</id>
+      <url>http://some.url</url>
+      <snapshots><enabled>false</enabled></snapshots>
+      <releases><enabled>false</enabled></releases>
+    </repository>
+\--
+
+
+
+Add this to your .pom:
+
+/--code xml .[brush:]
+        <repository>
+            <id>mavenhoe-repo</id>
+            <url>http://localhost:17283/jars?mvnPath=</url>
+        </repository>
+\--
+
+
+Alternatively, you can also add the repo to ~/.m2/settings.xml  (or any path and use `mvn -s settings-local.xml`):
+
+
+/--code xml .[brush:]
+<?xml version="1.0" encoding="UTF-8"?>
+<settings>
+
+  <localRepository>/home/ondra/work/hbn/runner/EAP-5.1/work-space/m2repo</localRepository>
+
+  <profiles>
+    <!-- Mavenhoe fake repository -->
+    <profile>
+      <id>mavenhoe-repo</id>
+      <activation><activeByDefault>true</activeByDefault></activation>
+      <repositories>
+        <repository>
+          <id>mavenhoe</id>
+          <url>http://localhost:17283/jars?mvnPath=</url>
+        </repository>
+      </repositories>
+    </profile>
+  </profiles>
+
+</settings>
+\--
+
+
+
+Tryout / debugging
+------------------
+
+
+Run Mavenhoe:
+
+/--code xml .[brush:]
+   java -jar Mavenhoe.jar  <path-to-EAP>
+\--
+
+and try:
+
+
+/--code xml .[brush:]
+http://localhost:17283/status
+\--
+
+  - Will list all indexed jars.
+
+
+/--code xml .[brush:]
+http://localhost:17283/jars?mvnPath=org/jboss/whatever/whatever/5.1.0.GA/whatever-5.1.0.GA.jar
+\--
+
+  - Should give 404
+
+
+/--code xml .[brush:]
+http://localhost:17283/jars?mvnPath=org/jboss/whatever/hibernate-core/3.3.2.GA_CP03/hibernate-core-3.3.2.GA_CP03.jar
+\--
+
+  - Should let you download the hibernate-core-3.3.2.GA_CP03.jar
+
+
+/--code xml .[brush:]
+http://localhost:17283/jars?mvnPath=foo/revolver/5.1.0.GA/foobar-5.1.0.GA.jar
+\--
+
+    * Note how Mavenhoe (cur.ver.) only cares about the artifact name part of the Maven-style path, revolver.
+      Should let you download the resolver.jar
+          Also note that it looks for the best match. That's because the name in the product may differ from the Maven artifact name.
+    * "Best match" removed, didn't provide good results.
+    * Currently, it's an OR combination of
+         1. FileBasedMapper - see the mapping file above
+         2. ArtifactIdMapper - looks for <artifactId>.jar .
+    * This is a subject to become configurable in some simple way
+
+/--code xml .[brush:]
+http://localhost:17283/shutdown
+\--
+
+  - Shuts the server down.
+
+
+
+**Sample log output:**
+
+/--code plain .[brush:]
+DEBUG org.jboss.qa.mavenhoe.mappers.OrMapper   Looking for: jdom:jdom:1.0 = jdom-1.0.jar
+DEBUG org.jboss.qa.mavenhoe.mappers.FileBasedMapper   Looking for: jdom:jdom:1.0 = jdom-1.0.jar
+DEBUG org.jboss.qa.mavenhoe.mappers.FileBasedMapper     Thus  for: 'jdom:jdom'
+DEBUG org.jboss.qa.mavenhoe.mappers.FileBasedMapper     Supposed file name: null
+DEBUG org.jboss.qa.mavenhoe.mappers.ArtifactIdMapper   Looking for: jdom:jdom:1.0:jar = jdom-1.0.jar
+DEBUG org.jboss.qa.mavenhoe.mappers.ArtifactIdMapper     Supposed file name: jdom
+DEBUG org.jboss.qa.mavenhoe.MavenHoeApp
+  Found: JarInfo{ name: jdom, version: 5.1.0 (build: SVNTag=JBPAPP_5_1_0 date=201009150028),
+     group: null,
+     path: eap/jboss-eap-5.1/jboss-as/server/deploy/admin-console.war/WEB-INF/lib/jdom.jar
+     base: eap }
+\--
+
+
+
+TODO's
+======
+
+* `normalizeName()`  - split by dashes and `_`'s, remove numbers and dots; then compare these parts. Esp. first ones.
+
+

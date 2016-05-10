@@ -1,0 +1,148 @@
+<html>
+<head>
+<link rel="stylesheet" href="texy-sandbox.css" />
+</head>
+<body>
+
+<h1
+id="toc-mavenhoe-fake-maven-repository-from-jar-s-in-local-directory-tree">Mavenhoe&nbsp;&ndash;
+fake Maven repository from .jar's&nbsp;in local directory&nbsp;tree</h1>
+
+<h2 id="toc-purpose">Purpose</h2>
+
+<p>QA dept often needs to run a maven project with “faked” dependencies&nbsp;&ndash;
+the actual .jar files must be taken from a product's&nbsp;dis&shy;tribution, which are
+not in any Maven repository (like EAP's .zip or RPM distribution).</p>
+
+<p>This utility is one of the ways to solve this problem. It scans a given
+directory for .jar files, indexes them, and opens a server acting as a Maven
+repository, in the sense of serving the indexed .jar&nbsp;files.</p>
+
+<p>Which file will be server is determined by match of strings in the provided
+Maven URL path
+(localhost:17283/&lt;grou&shy;p&gt;/&lt;artifact&gt;/&lt;ver&shy;sion&gt;/&lt;filena&shy;me&gt;.jar).
+This algorithm is a matter of future improvement. Using static mapping file is a
+possibility.</p>
+
+<h2 id="toc-usage">Usage</h2>
+
+<h3 id="toc-configuration">Configuration</h3>
+
+<p>Prepare a mapping file, see e.g. extracted-metadata.txt.zip attached to <a
+href="https://docspace.corp.redhat.com/docs/DOC-53554">https://docspace.corp.redhat.com/docs/DOC-53554</a>&nbsp;:</p>
+
+<pre
+class="brush: plain"><code>jboss-managed.jar      org/jboss/man/             jboss-managed      2.1.0.SP1     jboss-managed-2.1.0.SP1.jar
+getopt.jar             gnu-getopt/                getopt             1.0.12-brew   getopt-1.0.12-brew.jar
+jboss-kernel.jar       org/jboss/microcontainer/  jboss-kernel       2.0.6.GA      jboss-kernel-2.0.6.GA.jar
+jboss-logging-spi.jar  org/jboss/logging/         jboss-logging-spi  2.1.0.GA      jboss-logging-spi-2.1.0.GA.jar
+...</code></pre>
+
+<p>The first column is the filename in the .zip; Then groupId (with either
+slashes or dots), artifactId, version, artifact file name, respectively.</p>
+
+<p>You're expected to check the first column against the .zip&nbsp;file.</p>
+
+<p>This is a temporary solution, later this info will be acquired from an online
+database.</p>
+
+<h3 id="toc-maven-project-preparation">Maven project preparation</h3>
+
+<p>Disable the central repository; see <a
+href="http://community.jboss.org/thread/89912">http://community.jboss.org/thread/89912</a>
+. One (IMO the best) option is to override it in <code>pom.xml</code>:</p>
+
+<pre
+class="brush: xml"><code>&lt;repository&gt;
+  &lt;id&gt;central&lt;/id&gt;
+  &lt;url&gt;http://some.url&lt;/url&gt;
+  &lt;snapshots&gt;&lt;enabled&gt;false&lt;/enabled&gt;&lt;/snapshots&gt;
+  &lt;releases&gt;&lt;enabled&gt;false&lt;/enabled&gt;&lt;/releases&gt;
+&lt;/repository&gt;</code></pre>
+
+<p>Add this to your .pom:</p>
+
+<pre
+class="brush: xml"><code>&lt;repository&gt;
+    &lt;id&gt;mavenhoe-repo&lt;/id&gt;
+    &lt;url&gt;http://localhost:17283/jars?mvnPath=&lt;/url&gt;
+&lt;/repository&gt;</code></pre>
+
+<p>Alternatively, you can also add the repo to ~/.m2/settings.xml (or any path
+and use <code>mvn -s settings-local.xml</code>):</p>
+
+<pre
+class="brush: xml"><code>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;settings&gt;
+
+  &lt;localRepository&gt;/home/ondra/work/hbn/runner/EAP-5.1/work-space/m2repo&lt;/localRepository&gt;
+
+  &lt;profiles&gt;
+    &lt;!-- Mavenhoe fake repository --&gt;
+    &lt;profile&gt;
+      &lt;id&gt;mavenhoe-repo&lt;/id&gt;
+      &lt;activation&gt;&lt;activeByDefault&gt;true&lt;/activeByDefault&gt;&lt;/activation&gt;
+      &lt;repositories&gt;
+        &lt;repository&gt;
+          &lt;id&gt;mavenhoe&lt;/id&gt;
+          &lt;url&gt;http://localhost:17283/jars?mvnPath=&lt;/url&gt;
+        &lt;/repository&gt;
+      &lt;/repositories&gt;
+    &lt;/profile&gt;
+  &lt;/profiles&gt;
+
+&lt;/settings&gt;</code></pre>
+
+<h3 id="toc-tryout-debugging">Tryout / debugging</h3>
+
+<p>Run Mavenhoe:</p>
+
+<pre
+class="brush: xml"><code>java -jar Mavenhoe.jar  &lt;path-to-EAP&gt;</code></pre>
+
+<p>and try:</p>
+
+<pre class="brush: xml"><code>http://localhost:17283/status</code></pre>
+
+<p>&ndash; Will list all indexed jars.</p>
+
+<pre
+class="brush: xml"><code>http://localhost:17283/jars?mvnPath=org/jboss/whatever/whatever/5.1.0.GA/whatever-5.1.0.GA.jar</code></pre>
+
+<p>&ndash; Should give 404</p>
+
+<pre
+class="brush: xml"><code>http://localhost:17283/jars?mvnPath=org/jboss/whatever/hibernate-core/3.3.2.GA_CP03/hibernate-core-3.3.2.GA_CP03.jar</code></pre>
+
+<p>&ndash; Should let you download the hibernate-core-3.3.2.GA_CP03.jar</p>
+
+<pre
+class="brush: xml"><code>http://localhost:17283/jars?mvnPath=foo/revolver/5.1.0.GA/foobar-5.1.0.GA.jar</code></pre>
+
+<p>* Note how Mavenhoe (cur.ver.) only cares about the artifact name part of the
+Maven-style path, revolver.<br />
+Should let you download the resolver.jar<br />
+Also note that it looks for the best match. That's&nbsp;because the name in the
+product may differ from the Maven artifact name.<br />
+* “Best match” removed, didn't provide good results.<br />
+* Currently, it's&nbsp;an OR combination of<br />
+1.&nbsp;FileBasedMapper&nbsp;&ndash; see the mapping file above<br />
+2.&nbsp;ArtifactId&shy;Mapper&nbsp;&ndash; looks for &lt;artifactId&gt;.jar .<br />
+* This is a subject to become configurable in some simple&nbsp;way</p>
+
+<pre class="brush: xml"><code>http://localhost:17283/shutdown</code></pre>
+
+<p>&ndash; Shuts the server down.</p>
+
+<p><strong>Sample log output:</strong></p>
+
+<pre
+class="brush: plain"><code>DEBUG org.jboss.qa.mavenhoe.mappers.OrMapper   Looking for: jdom:jdom:1.0 = jdom-1.0.jar
+DEBUG org.jboss.qa.mavenhoe.mappers.FileBasedMapper   Looking for: jdom:jdom:1.0 = jdom-1.0.jar
+DEBUG org.jboss.qa.mavenhoe.mappers.FileBasedMapper     Thus  for: 'jdom:jdom'
+DEBUG org.jboss.qa.mavenhoe.mappers.FileBasedMapper     Supposed file name: null
+DEBUG org.jboss.qa.mavenhoe.mappers.ArtifactIdMapper   Looking for: jdom:jdom:1.0:jar = jdom-1.0.jar
+DEBUG org.jboss.qa.mavenhoe.mappers.ArtifactIdMapper     Supposed file name: jdom
+DEBUG org.jboss</code></pre>
+
+</body></html>
