@@ -1,0 +1,191 @@
+<body><p><strong>SVN:</strong> <a href="https://svn.devel.redhat.com/repos/jboss-qa/tools/Mavenhoe/trunk/" target="_blank" _mce_href="https://svn.devel.redhat.com/repos/jboss-qa/tools/Mavenhoe/trunk/">https://svn.devel.redhat.com/repos/jboss-qa/tools/Mavenhoe/trunk/ </a>​(ABANDONED)</p>
+<p><strong>Git:  </strong></p>
+<p><strong>Readme:</strong> <a href="https://rawgit.com/OndraZizka/MavenHoe/master/docs/README.html" title="https://rawgit.com/OndraZizka/MavenHoe/master/docs/README.html">https://rawgit.com/OndraZizka/MavenHoe/master/docs/README.html</a></p>
+<p><strong>JIRA:</strong> <a href="https://issues.jboss.org/browse/JBQA-3989" target="_blank" _mce_href="https://issues.jboss.org/browse/JBQA-3989">https://issues.jboss.org/browse/JBQA-3989</a></p>
+<p>Unofficial home page: <a href="http://ondra.zizka.cz/stranky/programovani/java/maven/mavenhoe-fake-jar-repository.texy" target="_blank" _mce_href="http://ondra.zizka.cz/stranky/programovani/java/maven/mavenhoe-fake-jar-repository.texy">http://ondra.zizka.cz/stranky/programovani/java/maven/mavenhoe-fake-jar-repository.texy</a></p>
+<p></p>
+<p></p>
+<h1>Purpose</h1>
+<p>QA dept often needs to  run a maven project with "faked" dependencies - the actual .jar files  must be taken from a product's distribution, which are not in any Maven  repository (like EAP's .zip or RPM distribution).</p>
+<p></p>
+<p>This  utility is one of the ways to solve this problem. It scans a given  directory for .jar files, indexes them, and opens a server acting as a  Maven repository, in the sense of serving the indexed .jar files.</p>
+<p></p>
+<p>Which file will be served is determined by match of  strings in the provided Maven URL path  (localhost:17283/&lt;group&gt;/&lt;artifact&gt;/&lt;version&gt;/&lt;filename&gt;.jar).  This algorithm is a matter of future improvement. Using static mapping  file is a possibility.</p>
+<p></p>
+<h1>Usage</h1>
+<p></p>
+<h4>Maven project  preparation</h4>
+<p></p>
+<p>Optionally disable the central repository if  you shouldn't need it - i.e. all your dependencies should be in the  directories indexed by Mavenhoe.</p>
+<p>See <a href="http://community.jboss.org/thread/89912" target="_blank" _jive_internal="true" _mce_href="http://community.jboss.org/thread/89912">http://community.jboss.org/thread/89912</a> . One (IMO the best) option is to override it in pom.xml:</p>
+<p></p>
+<pre jivemacro="code" ___default_attr="xml">
+<p>    &lt;repository&gt;<br />      &lt;id&gt;central&lt;/id&gt;<br />      &lt;url&gt;<a href="http://some.url/" target="_blank" _mce_href="http://some.url">http://some.url</a>&lt;/url&gt;<br />      &lt;snapshots&gt;&lt;enabled&gt;false&lt;/enabled&gt;&lt;/snapshots&gt;<br />      &lt;releases&gt;&lt;enabled&gt;false&lt;/enabled&gt;&lt;/releases&gt;<br />    &lt;/repository&gt;</p>
+</pre>
+<p></p>
+<p>Add  Mavenhoe repository to your pom.xml:</p>
+<pre jivemacro="code" ___default_attr="xml">
+<p>        &lt;repository&gt;<br />            &lt;id&gt;mavenhoe-repo&lt;/id&gt;<br />            &lt;url&gt;<a href="http://localhost:17283/jars?mvnPath=" target="_blank" _mce_href="http://localhost:17283/jars?mvnPath=">http://localhost:17283/jars?mvnPath=</a>&lt;/url&gt;<br />        &lt;/repository&gt;</p>
+</pre>
+<p></p>
+<p>Alternatively,  you can also add the repo to <strong>~/.m2/settings.xml</strong> (or  any path and use `mvn -s settings-local.xml`):</p>
+<p></p>
+<pre jivemacro="code" ___default_attr="xml">
+<p>&lt;?xml version="1.0" encoding="UTF-8"?&gt;<br />&lt;settings&gt;<br /><br />  &lt;localRepository&gt;/home/ondra/work/hbn/runner/EAP-5.1/work-space/m2repo&lt;/localRepository&gt;<br /><br />  &lt;profiles&gt;<br />    &lt;!-- Mavenhoe fake repository --&gt;<br />    &lt;profile&gt;<br />      &lt;id&gt;mavenhoe-repo&lt;/id&gt;<br />      &lt;activation&gt;&lt;activeByDefault&gt;true&lt;/activeByDefault&gt;&lt;/activation&gt;<br />      &lt;repositories&gt;<br />        &lt;repository&gt;<br />          &lt;id&gt;mavenhoe&lt;/id&gt;<br />          &lt;url&gt;<a href="http://localhost:17283/jars?mvnPath=" target="_blank" _mce_href="http://localhost:17283/jars?mvnPath=">http://localhost:17283/jars?mvnPath=</a>&lt;/url&gt;<br />        &lt;/repository&gt;<br />      &lt;/repositories&gt;<br />    &lt;/profile&gt;<br />  &lt;/profiles&gt;<br /><br />&lt;/settings&gt;</p>
+</pre>
+<h4>Mapping  file</h4>
+<p>Mapping file tells Mavenhoe which file should be served for  certain G:A:C:V axes.</p>
+<p>You can provide multiple mapping files,  using parameter <strong>-map &lt;path/map.txt&gt;</strong></p>
+<p></p>
+<p>An  example of such file is the <em>extracted-metadata.txt.zip</em> attached to <a href="/docs/DOC-85954" target="_blank" _jive_internal="true" _mce_href="https://docspace.corp.redhat.com/docs/DOC-53554">https://docspace.corp.redhat.com/docs/DOC-53554</a> :</p>
+<p></p>
+<pre jivemacro="code" ___default_attr="plain">
+<p># Format:</p>
+<p># &lt;real-file-name&gt;    &lt;groupId&gt;                  &lt;artifactId&gt; [@&lt;cls&gt;] &lt;version&gt;     &lt;virtual-file-name&gt;</p>
+<p>jboss-managed.jar      org/jboss/man/             jboss-managed         2.1.0.SP1     jboss-managed-2.1.0.SP1.jar<br />getopt.jar             gnu-getopt/                getopt                1.0.12-brew   getopt-1.0.12-brew.jar<br />jboss-kernel.jar       org/jboss/microcontainer/  jboss-kernel          2.0.6.GA      jboss-kernel-2.0.6.GA.jar<br />jboss-logging-spi.jar  org/jboss/logging/         jboss-logging-spi     2.1.0.GA      jboss-logging-spi-2.1.0.GA.jar</p>
+<p>...</p>
+</pre>
+<p></p>
+<p><strong>The  first column</strong> is path to a file which should be served (base  dir is the current) to Maven client.</p>
+<p><strong>Further columns</strong> are: groupId (with either  slashes or dots), artifactId, [@classifier,]  version, artifact file name, respectively.</p>
+<p><strong>Classifier</strong> can be optionally specified at fourth column, prepended with <strong>@</strong>   (shifting all remaining columns).</p>
+<p></p>
+<p>For JBoss  products, these information info will be acquired from an online  database (see <a href="/docs/DOC-84460#Versions_database" target="_blank" _jive_internal="true" _mce_href="https://docspace.corp.redhat.com/docs/DOC-52060#Versions_database">https://docspace.corp.redhat.com/docs/DOC-52060#Versions_database</a> ).</p>
+<p></p>
+<p></p>
+<h4>Command line options</h4>
+<p>Command  Format (hopefully the syntax is clear :)</p>
+<p></p>
+<pre jivemacro="code" ___default_attr="plain">
+<p>mavenhoe [-sp] ( -map [-fakepoms] &lt;map.txt&gt; | -i [-fakepoms] &lt;dir&gt; | -ipom &lt;dir&gt; )+</p>
+</pre>
+<p></p>
+<table border="1" cellpadding="3" cellspacing="0" style="border: 1px solid #000000; width: 858px; height: 158px;">
+<tbody>
+<tr><th align="center" style="background-color: #6690bc;" valign="middle"><strong>Header  1</strong></th><th align="center" style="background-color: #6690bc;" valign="middle"><strong>Header  2</strong></th></tr>
+<tr>
+<td valign="top">-i [-fakepom]  &lt;path/to/dir&gt;</td>
+<td valign="top">
+<p>Indexes <strong>.jar</strong> files in this dir tree.</p>
+<p>G:A:V used:</p>
+<p>1) META-INF/pom.xml if  present.</p>
+<p>2) filename : filename : MANIFEST.MF's  Implementation-Version.</p>
+</td>
+</tr>
+<tr>
+<td valign="top">-ipom  &lt;path/to/dir&gt;</td>
+<td valign="top">As with <strong>-i</strong>,  only searches for <strong>pom.xml</strong> files.</td>
+</tr>
+<tr>
+<td valign="top">-map [-fakepom] &lt;path/map.txt&gt;</td>
+<td valign="top">Mapping  file to be used by FileBasedMapper.</td>
+</tr>
+<tr>
+<td valign="top">-sp</td>
+<td valign="top">Strip paths from the 1st column in all map files. (applies  to all -map's).</td>
+</tr>
+<tr>
+<td valign="top">-fakepom</td>
+<td valign="top">
+<p>Applied to next dir tree; Mavenhoe will serve fake <strong>.pom</strong> files with no dependencies.</p>
+<p>G:A:C:V used are as described above.</p>
+</td>
+</tr>
+<tr>
+<td valign="top"></td>
+<td valign="top"></td>
+</tr>
+</tbody>
+</table>
+<p></p>
+<p></p>
+<h4>Meta  URLs</h4>
+<p><a href="http://localhost:17283/status" target="_blank" _mce_href="http://localhost:17283/status">http://localhost:17283/status</a></p>
+<pre jivemacro="code" ___default_attr="plain">
+<p><a href="http://localhost:17283/status" target="_blank" _mce_href="http://localhost:17283/status">http://localhost:17283/status</a></p>
+</pre>
+<p>            Will list all indexed jars.</p>
+<p></p>
+<pre jivemacro="code" ___default_attr="plain">
+<p><a href="http://localhost:17283/fbmStatus" target="_blank" _mce_href="http://localhost:17283/fbmStatus">http://localhost:17283/fbmStatus</a></p>
+</pre>
+<p>            Will list FileBasedMapper's maps.</p>
+<p></p>
+<pre jivemacro="code" ___default_attr="plain">
+<p><a href="http://localhost:17283/shutdown" target="_blank" _mce_href="http://localhost:17283/shutdown">http://localhost:17283/shutdown</a></p>
+</pre>
+<p>            Shuts the server down.</p>
+<h4>Artifact URLs</h4>
+<p></p>
+<table border="1" cellpadding="3" cellspacing="0" style="width: 100%; border: 1px solid #000000;">
+<tbody>
+<tr><th align="center" style="background-color: #6690bc;" valign="middle"><strong>HTTP code</strong></th><th align="center" style="background-color: #6690bc;" valign="middle"><strong>Meaning</strong></th></tr>
+<tr>
+<td>
+<p><strong>200</strong></p>
+</td>
+<td>Requested  artifact was found, and is server in the response body. See the DEBUG  log messages for details.</td>
+</tr>
+<tr>
+<td><strong>400</strong></td>
+<td>Wrong  G:A:V path - not in a format <em>&lt;groupId&gt;/&lt;artifactId&gt;/&lt;version&gt;/&lt;filename&gt;.&lt;packaging&gt;</em> .</td>
+</tr>
+<tr>
+<td><strong>403</strong></td>
+<td>Payment required - send  donation to author's PayPal .-)</td>
+</tr>
+<tr>
+<td><strong>404</strong></td>
+<td>Requested  artifact was not found. See DEBUG logs what was searched.</td>
+</tr>
+<tr>
+<td><strong>409</strong></td>
+<td>FileBasedMapper  found a match in a mapping file, but the referenced artifact file does  not exist (nothing to serve).</td>
+</tr>
+<tr>
+<td><strong>500</strong></td>
+<td>Internal  exception - bug in the app.</td>
+</tr>
+</tbody>
+</table>
+<p></p>
+<p></p>
+<pre jivemacro="code" ___default_attr="plain">
+<p><a href="http://localhost:17283/jars?mvnPath=org/jboss/whatever/whatever/5.1.0.GA/whatever-5.1.0.GA.jar" target="_blank" _mce_href="http://localhost:17283/jars?mvnPath=org/jboss/whatever/whatever/5.1.0.GA/whatever-5.1.0.GA.jar">http://localhost:17283/jars?mvnPath=org/jboss/whatever/whatever/5.1.0.GA/whatever-5.1.0.GA.jar</a></p>
+</pre>
+<p>-  Should give 404</p>
+<p></p>
+<pre jivemacro="code" ___default_attr="plain">
+<p><a href="http://localhost:17283/jars?mvnPath=org/jboss/whatever/hibernate-core/3.3.2.GA_CP03/hibernate-core-3.3.2.GA_CP03.jar" target="_blank" _mce_href="http://localhost:17283/jars?mvnPath=org/jboss/whatever/hibernate-core/3.3.2.GA_CP03/hibernate-core-3.3.2.GA_CP03.jar">http://localhost:17283/jars?mvnPath=org/jboss/whatever/hibernate-core/3.3.2.GA_CP03/hibernate-core-3.3.2.GA_CP03.jar</a></p>
+</pre>
+<p>-  Should let you download the hibernate-core-3.3.2.GA_CP03.jar</p>
+<p></p>
+<p></p>
+<h2>Build  process tips</h2>
+<p></p>
+<p>To ensure that your dependencies are not  downloaded from local Maven repository, wipe them out:</p>
+<pre jivemacro="code" ___default_attr="plain">
+<p>mvn build-helper:remove-project-artifact</p>
+</pre>
+<p></p>
+<p>To  use trully "local" repository solely for one project, set it to be in a  directory.</p>
+<p>This can be done by using modified <em>settings.xml</em>.</p>
+<p></p>
+<pre jivemacro="code" ___default_attr="plain">
+<p>cp ~/.m2/settings.xml ./settings-local.xml</p>
+<p>sed "s|&lt;localRepository&gt;\(.*\)&lt;/localRepository&gt;|&lt;localRepository&gt;local_repo&lt;/localRepository&gt;|" -i settings-local.xml<br />mvn -s settings-local.xml ...</p>
+</pre>
+<p></p>
+<h2>Sample  log output</h2>
+<p></p>
+<pre jivemacro="code" ___default_attr="plain">
+<p>2010-12-10 00:38:25,692 DEBUG org.jboss.qa.mavenhoe.mappers.OrMapper   Looking for: jdom : jdom : 1.0 : jdom-1.0.jar<br />2010-12-10 00:38:25,693 DEBUG org.jboss.qa.mavenhoe.mappers.FileBasedMapper   Looking for: jdom : jdom : 1.0 : jdom-1.0.jar<br />2010-12-10 00:38:25,693 DEBUG org.jboss.qa.mavenhoe.mappers.FileBasedMapper     Thus  for: 'jdom:jdom'<br />2010-12-10 00:38:25,693 DEBUG org.jboss.qa.mavenhoe.mappers.FileBasedMapper     Supposed file name: null<br />2010-12-10 00:38:25,693 DEBUG org.jboss.qa.mavenhoe.mappers.ArtifactIdMapper   Looking for: jdom : jdom : 1.0 : jar = jdom-1.0.jar<br />2010-12-10 00:38:25,693 DEBUG org.jboss.qa.mavenhoe.mappers.ArtifactIdMapper     Supposed file name: jdom<br />2010-12-10 00:38:25,693 DEBUG org.jboss.qa.mavenhoe.MavenHoeApp  </p>
+<p>  Found: JarInfo{ name: jdom, version: 5.1.0 (build: SVNTag=JBPAPP_5_1_0 date=201009150028),</p>
+<p>                  group: null,</p>
+<p>                  path: eap/jboss-eap-5.1/jboss-as/server/production/deploy/admin-console.war/WEB-INF/lib/jdom.jar,</p>
+<p>                  base: eap }</p>
+</pre>
+<p></p>
+<p>See  the Mavenhoe.log attachment.</p>
+<p>.</p>
+<div style="position: absolute; left: -10000px; top: 0px; width: 1px; height: 1px; overflow: hidden;">See the DEBUG log messages for</div></body>
