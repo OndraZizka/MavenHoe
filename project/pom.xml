@@ -1,5 +1,5 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>org.jboss.qa</groupId>
@@ -10,17 +10,17 @@
     <name>Mavenhoe</name>
 
     <properties>
-      <jetty.version>6.1.26</jetty.version>
-      <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-      <mainClass>org.jboss.qa.mavenhoe.MavenHoeApp</mainClass>
-      <distDir>${project.basedir}/../dist</distDir>
+        <jetty.version>6.1.26</jetty.version>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <mainClass>org.jboss.qa.mavenhoe.MavenHoeApp</mainClass>
+        <distDir>${project.basedir}/../dist</distDir>
     </properties>
 
 
     <url>http://maven.apache.org</url>
     <build>
 
-        <resources>
+    <resources>
             <!-- This allows to have .jsp's next to java files. For convenience in IDE. -->
             <resource>
                 <directory>src/main/java</directory>
@@ -205,118 +205,110 @@
     </profiles>
 
 
-
-
-
     <repositories>
-      <repository><id>ondrazizka-googlecode</id><url>http://ondrazizka.googlecode.com/svn/maven</url></repository>
+        <repository><id>ondrazizka-googlecode</id><url>http://ondrazizka.googlecode.com/svn/maven</url></repository>
     </repositories>
 
 
     <dependencyManagement>
        <dependencies>
-         <dependency>
-           <groupId>log4j</groupId>
-           <artifactId>log4j</artifactId>
-           <version>1.2.16</version>
-         </dependency>
+           <dependency>
+               <groupId>log4j</groupId>
+               <artifactId>log4j</artifactId>
+               <version>1.2.16</version>
+           </dependency>
        </dependencies>
     </dependencyManagement>
 
     <dependencies>
 
-      <!-- Commons -->
-      <dependency>
-         <groupId>commons-lang</groupId>
-         <artifactId>commons-lang</artifactId>
-         <version>2.5</version>
-      </dependency>
+        <!-- Commons -->
+        <dependency>
+            <groupId>commons-lang</groupId>
+            <artifactId>commons-lang</artifactId>
+            <version>2.5</version>
+        </dependency>
 
-      <dependency>
-         <groupId>commons-io</groupId>
-         <artifactId>commons-io</artifactId>
-         <version>2.0</version>
-      </dependency>
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>2.0</version>
+        </dependency>
 
-      <!-- Swizzle Stream - for dispatchFakePom()  
-      <dependency>
-         <groupId>org.codehaus.swizzle</groupId>
-         <artifactId>swizzle-stream</artifactId>
-         <version>1.6</version>
-      </dependency>
-
-
-      <dependency>
-         <groupId>postgresql</groupId>
-         <artifactId>postgresql</artifactId>
-         <version>8.4-702.jdbc4</version>
-         <scope>compile</scope>
-         <optional>true</optional>
-      </dependency>
-      -->
-
-      <!-- Faking logging deps of the JSP parser.
-           Otherwise it gives  NoClassDefFoundError: org/apache/commons/logging/LogFactory -->
-      <dependency>
-         <groupId>org.slf4j</groupId>
-         <artifactId>jcl104-over-slf4j</artifactId>
-         <version>1.5.11</version>
-      </dependency>
+        <!-- Swizzle Stream - for dispatchFakePom()
+        <dependency>
+           <groupId>org.codehaus.swizzle</groupId>
+           <artifactId>swizzle-stream</artifactId>
+           <version>1.6</version>
+        </dependency>
 
 
+        <dependency>
+           <groupId>postgresql</groupId>
+           <artifactId>postgresql</artifactId>
+           <version>8.4-702.jdbc4</version>
+           <scope>compile</scope>
+           <optional>true</optional>
+        </dependency>
+        -->
+
+        <!-- Faking logging deps of the JSP parser.
+             Otherwise it gives  NoClassDefFoundError: org/apache/commons/logging/LogFactory -->
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>jcl104-over-slf4j</artifactId>
+            <version>1.5.11</version>
+        </dependency>
 
 
-      <!-- JDom (for pom.xml parsing) -->
-      <dependency>
-         <groupId>org.jdom</groupId>
-         <artifactId>jdom</artifactId>
-         <version>1.1</version>
-      </dependency>
-      <!-- JDom's XPath needs this - XPath.newInstance("/testsuite/testcase") -> CNFEx org.jaxen.NamespaceContext -->
-      <dependency>
-         <groupId>org.jdom</groupId>
-         <artifactId>jaxen-core</artifactId>
-         <version>1.0-FCS</version>
-      </dependency>
-      <!-- JDom's XPath needs this - XPath.newInstance("/testsuite/testcase") -> NoClassDefFoundError: org/jaxen/jdom/JDOMXPath: org/jaxen/jdom/JDOMXPath -->
-      <dependency>
-         <groupId>org.jdom</groupId>
-         <artifactId>jaxen-jdom</artifactId>
-         <version>1.0-FCS</version>
-      </dependency>
-      <!-- JDom's XPath needs this - XPath.newInstance("/testsuite/testcase") -> CNFEx org.saxpath.SAXPathException -->
-      <dependency>
-         <groupId>org.jdom</groupId>
-         <artifactId>saxpath</artifactId>
-         <version>1.0-FCS</version>
-      </dependency>
+        <!-- JDom (for pom.xml parsing) -->
+        <dependency>
+            <groupId>org.jdom</groupId>
+            <artifactId>jdom</artifactId>
+            <version>1.1</version>
+        </dependency>
+        <!-- JDom's XPath needs this - XPath.newInstance("/testsuite/testcase") -> CNFEx org.jaxen.NamespaceContext -->
+        <dependency>
+            <groupId>org.jdom</groupId>
+            <artifactId>jaxen-core</artifactId>
+            <version>1.0-FCS</version>
+        </dependency>
+        <!-- JDom's XPath needs this - XPath.newInstance("/testsuite/testcase") -> NoClassDefFoundError: org/jaxen/jdom/JDOMXPath: org/jaxen/jdom/JDOMXPath -->
+        <dependency>
+            <groupId>org.jdom</groupId>
+            <artifactId>jaxen-jdom</artifactId>
+            <version>1.0-FCS</version>
+        </dependency>
+        <!-- JDom's XPath needs this - XPath.newInstance("/testsuite/testcase") -> CNFEx org.saxpath.SAXPathException -->
+        <dependency>
+            <groupId>org.jdom</groupId>
+            <artifactId>saxpath</artifactId>
+            <version>1.0-FCS</version>
+        </dependency>
 
 
+        <!-- Slf4j -->
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-log4j12</artifactId>
+            <version>1.5.11</version>
+        </dependency>
 
 
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.8.2</version>
+            <scope>test</scope>
+        </dependency>
 
-      <!-- Slf4j -->
-      <dependency>
-        <groupId>org.slf4j</groupId>
-        <artifactId>slf4j-log4j12</artifactId>
-        <version>1.5.11</version>
-      </dependency>
-
-
-      <dependency>
-        <groupId>junit</groupId>
-        <artifactId>junit</artifactId>
-        <version>4.8.2</version>
-        <scope>test</scope>
-      </dependency>
-
-      <!--
-      <dependency>
-         <groupId>commons-httpclient</groupId>
-         <artifactId>commons-httpclient</artifactId>
-         <version>3.1</version>
-      </dependency>
-      -->
+        <!--
+        <dependency>
+           <groupId>commons-httpclient</groupId>
+           <artifactId>commons-httpclient</artifactId>
+           <version>3.1</version>
+        </dependency>
+        -->
 
     </dependencies>
 
