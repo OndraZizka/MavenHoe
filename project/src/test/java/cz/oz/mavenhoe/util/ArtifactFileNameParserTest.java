@@ -11,7 +11,7 @@ import static org.junit.Assert.*;
 
 /**
  *
- * @author ondra
+ * @author Ondrej Zizka
  */
 public class ArtifactFileNameParserTest {
 

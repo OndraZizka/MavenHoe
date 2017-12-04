@@ -27,339 +27,340 @@ import static org.junit.Assert.*;
 
 /**
  *
- * @author ondra
+ * @author Ondrej Zizka
  */
 public class JarFinderServletTest {
 
-   private static final String TEST_QUERY_STRING = "mvnPath=/postgresql/postgresql/8.2-510/postgresql-8.2-510.pom";
-   private static final String TEST_REQUEST_URL = "http://localhost:17283/jars";
+    private static final String TEST_QUERY_STRING = "mvnPath=/postgresql/postgresql/8.2-510/postgresql-8.2-510.pom";
+    private static final String TEST_REQUEST_URL = "http://localhost:17283/jars";
 
-   static HttpServletRequest req = new HttpServletRequest() {
+    static HttpServletRequest req = new HttpServletRequest() {
 
-      final StringBuffer urlSB = new StringBuffer( TEST_REQUEST_URL );
+        final StringBuffer urlSB = new StringBuffer( TEST_REQUEST_URL );
 
-      public String getQueryString() {
+        public String getQueryString() {
          return TEST_QUERY_STRING;
-      }
-      
-      public StringBuffer getRequestURL() {
+        }
+
+        public StringBuffer getRequestURL() {
          return urlSB;
-      }
+        }
 
-      // <editor-fold defaultstate="collapsed" desc="other overrides">
-      public String getAuthType() {
+        // <editor-fold defaultstate="collapsed" desc="other overrides">
+        public String getAuthType() {
          throw new UnsupportedOperationException("Not supported yet.");
-      }
+        }
 
-      public Cookie[] getCookies() {
+        public Cookie[] getCookies() {
          throw new UnsupportedOperationException("Not supported yet.");
-      }
+        }
 
-      public long getDateHeader(String name) {
+        public long getDateHeader(String name) {
          throw new UnsupportedOperationException("Not supported yet.");
-      }
+        }
 
-      public String getHeader(String name) {
+        public String getHeader(String name) {
          throw new UnsupportedOperationException("Not supported yet.");
-      }
+        }
 
-      public Enumeration getHeaders(String name) {
+        public Enumeration getHeaders(String name) {
          throw new UnsupportedOperationException("Not supported yet.");
-      }
+        }
 
-      public Enumeration getHeaderNames() {
+        public Enumeration getHeaderNames() {
          throw new UnsupportedOperationException("Not supported yet.");
-      }
+        }
 
-      public int getIntHeader(String name) {
+        public int getIntHeader(String name) {
          throw new UnsupportedOperationException("Not supported yet.");
-      }
+        }
 
-      public String getMethod() {
+        public String getMethod() {
          throw new UnsupportedOperationException("Not supported yet.");
-      }
+        }
 
-      public String getPathInfo() {
+        public String getPathInfo() {
          throw new UnsupportedOperationException("Not supported yet.");
-      }
+        }
 
-      public String getPathTranslated() {
+        public String getPathTranslated() {
          throw new UnsupportedOperationException("Not supported yet.");
-      }
+        }
 
-      public String getContextPath() {
+        public String getContextPath() {
          throw new UnsupportedOperationException("Not supported yet.");
-      }
+        }
 
-      public String getRemoteUser() {
+        public String getRemoteUser() {
          throw new UnsupportedOperationException("Not supported yet.");
-      }
+        }
 
-      public boolean isUserInRole(String role) {
+        public boolean isUserInRole(String role) {
          throw new UnsupportedOperationException("Not supported yet.");
-      }
+        }
 
-      public Principal getUserPrincipal() {
+        public Principal getUserPrincipal() {
          throw new UnsupportedOperationException("Not supported yet.");
-      }
+        }
 
-      public String getRequestedSessionId() {
+        public String getRequestedSessionId() {
          throw new UnsupportedOperationException("Not supported yet.");
-      }
+        }
 
-      public String getRequestURI() {
+        public String getRequestURI() {
          throw new UnsupportedOperationException("Not supported yet.");
-      }
+        }
 
-      public String getServletPath() {
+        public String getServletPath() {
          throw new UnsupportedOperationException("Not supported yet.");
-      }
+        }
 
-      public HttpSession getSession(boolean create) {
+        public HttpSession getSession(boolean create) {
          throw new UnsupportedOperationException("Not supported yet.");
-      }
+        }
 
-      public HttpSession getSession() {
+        public HttpSession getSession() {
          throw new UnsupportedOperationException("Not supported yet.");
-      }
+        }
 
-      public boolean isRequestedSessionIdValid() {
+        public boolean isRequestedSessionIdValid() {
          throw new UnsupportedOperationException("Not supported yet.");
-      }
+        }
 
-      public boolean isRequestedSessionIdFromCookie() {
+        public boolean isRequestedSessionIdFromCookie() {
          throw new UnsupportedOperationException("Not supported yet.");
-      }
+        }
 
-      public boolean isRequestedSessionIdFromURL() {
+        public boolean isRequestedSessionIdFromURL() {
          throw new UnsupportedOperationException("Not supported yet.");
-      }
+        }
 
-      public boolean isRequestedSessionIdFromUrl() {
+        public boolean isRequestedSessionIdFromUrl() {
          throw new UnsupportedOperationException("Not supported yet.");
-      }
+        }
 
-      public Object getAttribute(String name) {
+        public Object getAttribute(String name) {
          throw new UnsupportedOperationException("Not supported yet.");
-      }
+        }
 
-      public Enumeration getAttributeNames() {
+        public Enumeration getAttributeNames() {
          throw new UnsupportedOperationException("Not supported yet.");
-      }
+        }
 
-      public String getCharacterEncoding() {
+        public String getCharacterEncoding() {
          throw new UnsupportedOperationException("Not supported yet.");
-      }
+        }
 
-      public void setCharacterEncoding(String env) throws UnsupportedEncodingException {
+        public void setCharacterEncoding(String env) throws UnsupportedEncodingException {
          throw new UnsupportedOperationException("Not supported yet.");
-      }
+        }
 
-      public int getContentLength() {
+        public int getContentLength() {
          throw new UnsupportedOperationException("Not supported yet.");
-      }
+        }
 
-      public String getContentType() {
+        public String getContentType() {
          throw new UnsupportedOperationException("Not supported yet.");
-      }
+        }
 
-      public ServletInputStream getInputStream() throws IOException {
+        public ServletInputStream getInputStream() throws IOException {
          throw new UnsupportedOperationException("Not supported yet.");
-      }
+        }
 
-      public String getParameter(String name) {
+        public String getParameter(String name) {
          throw new UnsupportedOperationException("Not supported yet.");
-      }
+        }
 
-      public Enumeration getParameterNames() {
+        public Enumeration getParameterNames() {
          throw new UnsupportedOperationException("Not supported yet.");
-      }
+        }
 
-      public String[] getParameterValues(String name) {
+        public String[] getParameterValues(String name) {
          throw new UnsupportedOperationException("Not supported yet.");
-      }
+        }
 
-      public Map getParameterMap() {
+        public Map getParameterMap() {
          throw new UnsupportedOperationException("Not supported yet.");
-      }
+        }
 
-      public String getProtocol() {
+        public String getProtocol() {
          throw new UnsupportedOperationException("Not supported yet.");
-      }
+        }
 
-      public String getScheme() {
+        public String getScheme() {
          throw new UnsupportedOperationException("Not supported yet.");
-      }
+        }
 
-      public String getServerName() {
+        public String getServerName() {
          throw new UnsupportedOperationException("Not supported yet.");
-      }
+        }
 
-      public int getServerPort() {
+        public int getServerPort() {
          throw new UnsupportedOperationException("Not supported yet.");
-      }
+        }
 
-      public BufferedReader getReader() throws IOException {
+        public BufferedReader getReader() throws IOException {
          throw new UnsupportedOperationException("Not supported yet.");
-      }
+        }
 
-      public String getRemoteAddr() {
+        public String getRemoteAddr() {
          throw new UnsupportedOperationException("Not supported yet.");
-      }
+        }
 
-      public String getRemoteHost() {
+        public String getRemoteHost() {
          throw new UnsupportedOperationException("Not supported yet.");
-      }
+        }
 
-      public void setAttribute(String name, Object o) {
+        public void setAttribute(String name, Object o) {
          throw new UnsupportedOperationException("Not supported yet.");
-      }
+        }
 
-      public void removeAttribute(String name) {
+        public void removeAttribute(String name) {
          throw new UnsupportedOperationException("Not supported yet.");
-      }
+        }
 
-      public Locale getLocale() {
+        public Locale getLocale() {
          throw new UnsupportedOperationException("Not supported yet.");
-      }
+        }
 
-      public Enumeration getLocales() {
+        public Enumeration getLocales() {
          throw new UnsupportedOperationException("Not supported yet.");
-      }
+        }
 
-      public boolean isSecure() {
+        public boolean isSecure() {
          throw new UnsupportedOperationException("Not supported yet.");
-      }
+        }
 
-      public RequestDispatcher getRequestDispatcher(String path) {
+        public RequestDispatcher getRequestDispatcher(String path) {
          throw new UnsupportedOperationException("Not supported yet.");
-      }
+        }
 
-      public String getRealPath(String path) {
+        public String getRealPath(String path) {
          throw new UnsupportedOperationException("Not supported yet.");
-      }
+        }
 
-      public int getRemotePort() {
+        public int getRemotePort() {
          throw new UnsupportedOperationException("Not supported yet.");
-      }
+        }
 
-      public String getLocalName() {
+        public String getLocalName() {
          throw new UnsupportedOperationException("Not supported yet.");
-      }
+        }
 
-      public String getLocalAddr() {
+        public String getLocalAddr() {
          throw new UnsupportedOperationException("Not supported yet.");
-      }
+        }
 
-      public int getLocalPort() {
+        public int getLocalPort() {
          throw new UnsupportedOperationException("Not supported yet.");
-      }
-      // </editor-fold>
-   };
+        }
+        // </editor-fold>
+    };
 
 
 
 
-   /**
+    /**
     * Test of doGet method, of class JarFinderServlet.
     */
-   public void xtestDoGet() throws Exception {
-      
-      System.out.println("doGet");
+    public void xtestDoGet() throws Exception {
 
-      HttpServletResponse resp = null;
-      JarFinderServlet instance = null;
-      instance.doGet(req, resp);
-      // TODO review the generated test code and remove the default call to fail.
-      fail("The test case is a prototype.");
-   }
+        System.out.println("doGet");
+
+        HttpServletResponse resp = null;
+        JarFinderServlet instance = null;
+        instance.doGet(req, resp);
+        // TODO review the generated test code and remove the default call to fail.
+        fail("The test case is a prototype.");
+    }
 
 
-   
-   /**
+
+    /**
     * Test of dispatchFakePom method, of class JarFinderServlet.
     */
-   @Test
-   public void testDispatchFakePom() throws Exception {
-      System.out.println("dispatchFakePom");
+    @Test
+    public void testDispatchFakePom() throws Exception {
+        System.out.println("dispatchFakePom");
 
-      JarInfo requestedArtifact = new JarInfo("postgresql", "8.2-510", "org.postgresql",
+        JarInfo requestedArtifact = new JarInfo("postgresql", "8.2-510", "org.postgresql",
               "/postgresql/postgresql/8.2-510/postgresql-8.2-510.pom", "postgresql-8.2-510.pom", null, "pom");
 
-      JarInfo artifactInfo = new JarInfo("MyName", "0.0.0-VER", "org.mygroup.qa", "some/path.jar", "fileName.jar", new File("/base/dir"), "pack");
+        JarInfo artifactInfo = new JarInfo("MyName", "0.0.0-VER", "org.mygroup.qa", "some/path.jar", "fileName.jar", new File("/base/dir"), "pack");
 
 
-      // Where to print the result.
-      //final PrintStream os = System.out;
-      ByteArrayOutputStream baos = new ByteArrayOutputStream(512);
-      final PrintStream ps = new PrintStream( baos );
+        // Where to print the result.
+        //final PrintStream os = System.out;
+        ByteArrayOutputStream baos = new ByteArrayOutputStream(512);
+        final PrintStream ps = new PrintStream( baos );
 
-      /**  A mock implenting all methods used in dispatchFakePom(). */
-      HttpServletResponse resp = new Response(null){
-         @Override
-         public ServletOutputStream getOutputStream() throws IOException {
-            return new MyServletOutputStream( ps );
-         }
-         @Override public void setContentType(String contentType) { }
-      };
+        /**  A mock implenting all methods used in dispatchFakePom(). */
+        HttpServletResponse resp = new Response(null){
+            @Override
+            public ServletOutputStream getOutputStream() throws IOException {
+                return new MyServletOutputStream( ps );
+            }
+            @Override public void setContentType(String contentType) { }
+        };
 
-      JarFinderServlet.dispatchFakePom(requestedArtifact, artifactInfo, req, resp);
-      
-      String resultPom = baos.toString();
+        JarFinderServlet.dispatchFakePom(requestedArtifact, artifactInfo, req, resp);
 
-      // All parts are in place?
-      /*
-      assertTrue( resultPom.contains("MyName") );
-      assertTrue( resultPom.contains("0.0.0-VER") );
-      assertTrue( resultPom.contains("org.mygroup.qa") );
-      //assertTrue( resultPom.contains("some/path.jar") );
-      assertTrue( resultPom.contains("fileName.jar") );
-      assertTrue( resultPom.contains("pack") );
-       */
+        String resultPom = baos.toString();
 
-      /*
+        // All parts are in place?
+        /*
+        assertTrue( resultPom.contains("MyName") );
+        assertTrue( resultPom.contains("0.0.0-VER") );
+        assertTrue( resultPom.contains("org.mygroup.qa") );
+        //assertTrue( resultPom.contains("some/path.jar") );
+        assertTrue( resultPom.contains("fileName.jar") );
+        assertTrue( resultPom.contains("pack") );
+        */
+
+        /*
          pomTemplate = pomTemplate.replace("@GRP@", requestedArtifact.getGroup() );
          pomTemplate = pomTemplate.replace("@ART@", requestedArtifact.getName() );
          pomTemplate = pomTemplate.replace("@VER@", requestedArtifact.getVersion() );
          pomTemplate = pomTemplate.replace("@PACK@", requestedArtifact.getPackaging() );
          pomTemplate = pomTemplate.replace("@NAME@", requestedArtifact.getFileName() );
          pomTemplate = pomTemplate.replace("@DESC@", fakePom.toStringLong() );
-       */
+        */
 
-      assertTrue( resultPom, resultPom.contains("<groupId>org.postgresql</groupId>") );
-      assertTrue( resultPom, resultPom.contains("<artifactId>postgresql</artifactId>") );
-      assertTrue( resultPom, resultPom.contains("<version>8.2-510</version>") );
-      assertTrue( resultPom, resultPom.contains("<name>postgresql-8.2-510.pom</name>") );
-      //assertTrue( resultPom, resultPom.contains("<description>/postgresql/postgresql/8.2-510/postgresql-8.2-510.pom") );
-      assertTrue( resultPom, resultPom.contains("<url>"+TEST_REQUEST_URL+"?"+TEST_QUERY_STRING+"</url>") );
-      assertTrue( resultPom, resultPom.contains("<packaging>pom</packaging>") );
-
-      
+        assertTrue( resultPom, resultPom.contains("<groupId>org.postgresql</groupId>") );
+        assertTrue( resultPom, resultPom.contains("<artifactId>postgresql</artifactId>") );
+        assertTrue( resultPom, resultPom.contains("<version>8.2-510</version>") );
+        assertTrue( resultPom, resultPom.contains("<name>postgresql-8.2-510.pom</name>") );
+        //assertTrue( resultPom, resultPom.contains("<description>/postgresql/postgresql/8.2-510/postgresql-8.2-510.pom") );
+        assertTrue( resultPom, resultPom.contains("<url>"+TEST_REQUEST_URL+"?"+TEST_QUERY_STRING+"</url>") );
+        assertTrue( resultPom, resultPom.contains("<packaging>pom</packaging>") );
 
 
-      // Same as reference result?
-      String POM_XML_RESOURCE_PATH = "cz/oz/mavenhoe/server/FakePomResult.xml";
-      InputStream pomIS = JarFinderServlet.class.getClassLoader().getResourceAsStream( POM_XML_RESOURCE_PATH );
-      String referenceResultPom = IOUtils.toString(pomIS);
-      assertEquals( referenceResultPom, resultPom );
-   }
+
+
+        // Same as reference result?
+        String POM_XML_RESOURCE_PATH = "cz/oz/mavenhoe/server/FakePomResult.xml";
+        InputStream pomIS = JarFinderServlet.class.getClassLoader().getResourceAsStream( POM_XML_RESOURCE_PATH );
+        String referenceResultPom = IOUtils.toString(pomIS);
+        assertEquals( referenceResultPom, resultPom );
+    }
 }
 
 
 
 
 /**
- *  ServletOutputStream implementation which writes everything to the given PrintStream; System.out by default.
- * @author ondra
+ * ServletOutputStream implementation which writes everything to the given PrintStream; System.out by default.
+ *
+ * @author Ondrej Zizka
  */
 class MyServletOutputStream extends ServletOutputStream {
 
-   private final PrintStream out;
+    private final PrintStream out;
 
-   public MyServletOutputStream( PrintStream out ) {
+    public MyServletOutputStream( PrintStream out ) {
       this.out = out;
    }
-   public MyServletOutputStream() {
+    public MyServletOutputStream() {
       this.out = System.out;
    }
 
