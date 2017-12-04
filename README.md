@@ -27,7 +27,7 @@ The first column is the `filename` in the `.zip`; Then `groupId` (with either sl
 
 This file can be prepared e.g. from the local `~/.m2/repository`:
 
-    cd ~/.m2/repository && find org/some/groupId -name *.jar | sed -E 's#(.*)/([^/]+)/([^/]+)/([^/]+\.jar)#\1 \2 \3 \4#' > /tmp/list && cd -
+    cd ~/.m2/repository && find org/some/groupId -name *.jar | sed -E 's#(.*)/([^/]+)/([^/]+)/([^/]+\.jar)#\4 \1 \2 \3 \4#' > /tmp/list && cd -
 
 You're expected to check the first column against the `.zip` file.
 
