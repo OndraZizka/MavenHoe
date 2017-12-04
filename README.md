@@ -3,18 +3,40 @@
 
 ## Purpose
 
-QA dept often needs to run a maven project with “faked” dependencies – the actual .jar files must be taken from a product's distribution, which are not in any Maven repository (like EAP's `.zip` or RPM distribution).
+Sometimes you need to run a Maven project with “faked” dependencies – the actual `.jar` files must be taken from a product's distribution, which are not in any Maven repository (e.g. a `.zip` or RPM distribution).
 
-This utility is one of the ways to solve this problem. It scans a given directory for .jar files, indexes them, and opens a server acting as a Maven repository, in the sense of serving the indexed `.jar` files.
+This utility is one of the ways to solve this problem. It scans a given directory for `.jar` files, indexes them, and opens a server acting as a Maven repository, in the sense of serving the indexed `.jar` files.
 
-Which file will be server is determined by match of strings in the provided Maven URL path (`localhost:17283/<group>/<artifact>/<version>/<filename>.jar`). This algorithm is a matter of future improvement. Using static mapping file is a possibility.
+Which file will be served is determined by the Maven axis provided in the URL path (`localhost:17283/<group>/<artifact>/<version>/<filename>.jar`). Best guess is used, but using a static mapping file is a possibility, too.
 
 ## Usage
 
-### Configuration
+### Serving from a directory of .jar's
+
+Simply run MavenHoe and direct it to the directory:
+
+    mavenhoe -i <directory/with/jars>
+    
+Example:
+
+    unzip wildfly-10.zip && mavenhoe -i wildfly-10/
+    
+To give it some more hints on what artifacts and versions the directory really contains, provide a directory where the respective `pom.xml` files are - i.e. the project source directory:
+
+    mavenhoe -i <directory/with/jars>  -ipom <dir-tree-with-poms>
+    
+If you need a precise control of which file will be served for which Maven axis (G:A:V), use a simple mapping file. See below for the syntax.
+
+    mavenhoe -i <directory/with/jars>  -map <mapping-file>
+    
+All these can be combined together. MavenHoe will merge the data and serve what it finds best for the situation. At least one must be present.
+
+    mavenhoe (-map <mapping-file> | -i (-fakepoms)? <dir-tree-with-jars> | -ipom <dir-tree-with-poms> )+\n" +
+
+
+### Static mapping file
 
 Prepare a mapping file (see e.g. extracted-metadata.txt.zip in the sources) :
-
 
     jboss-managed.jar      org/jboss/man/             jboss-managed      2.1.0.SP1     jboss-managed-2.1.0.SP1.jar
     getopt.jar             gnu-getopt/                getopt             1.0.12-brew   getopt-1.0.12-brew.jar
@@ -32,6 +54,8 @@ Also, Maven Appassembler plugin is capable of doing such lists when building the
 
 
 ## Maven project preparation
+
+To use MavenHoe as a repository to provide project dependencies, do the following:
 
 * Disable the central repository; see http://community.jboss.org/thread/89912 . One (IMO the best) option is to override it in `pom.xml`:
 
@@ -76,7 +100,8 @@ Also, Maven Appassembler plugin is capable of doing such lists when building the
 
 Run Mavenhoe:
 
-    java -jar Mavenhoe.jar  <path-to-EAP>
+    wget 
+    java -jar Mavenhoe.jar 
 
 and try:
 
