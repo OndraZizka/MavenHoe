@@ -1,4 +1,3 @@
-
 package org.jboss.qa.mavenhoe;
 
 import org.jboss.qa.mavenhoe.mappers.FileBasedMapper;
@@ -18,6 +17,5 @@ public class References {
    public void setFileBasedMapper(FileBasedMapper fileBasedMapper) {
       this.fileBasedMapper = fileBasedMapper;
    }
-
 
 }// class

@@ -1,4 +1,3 @@
-
 package org.jboss.qa.mavenhoe;
 
 import java.io.File;
@@ -29,7 +28,7 @@ public class InclExclFilter implements FileFilter {
 	private final boolean defaultAllowed;
 	private final List<InclExclItem> inclExclList;
 	private final int startOffset;
-  private final boolean[] parenthoodSequenceFlags;
+  	private final boolean[] parenthoodSequenceFlags;
 
 
 	/**
@@ -100,7 +99,7 @@ public class InclExclFilter implements FileFilter {
 
 	/** Alias for isAllowed(). */
 	//@Override
-   public boolean accept(File path) {
+    public boolean accept(File path) {
 		return this.isAllowed( path );
 	}
 
@@ -160,6 +159,5 @@ public class InclExclFilter implements FileFilter {
 		return allowed;
 		
 	}
-
 
 }// class

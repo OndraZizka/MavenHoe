@@ -1,4 +1,3 @@
-
 package org.jboss.qa.mavenhoe;
 
 import java.io.File;
@@ -28,10 +27,10 @@ public class JarInfo implements Comparable {
 	private boolean virtual;
 
 
-   public JarInfo(String name, String version, String group, String classifier, String path, String fileName, File baseDir, String packaging) {
-      this(name, version, group, path, fileName, baseDir, packaging);
-      this.classifier = classifier;
-   }
+	public JarInfo(String name, String version, String group, String classifier, String path, String fileName, File baseDir, String packaging) {
+		this(name, version, group, path, fileName, baseDir, packaging);
+		this.classifier = classifier;
+	}
 
 	public JarInfo(String name, String version, String group, String path, String fileName, File baseDir, String packaging) {
 		this.name = name;
@@ -47,35 +46,36 @@ public class JarInfo implements Comparable {
 	@Override
 	public String toString() {
 
-      if( DUMMY_INSTANCE == this )
-         return JarInfo.class.getSimpleName()+"{ dummy instance }";
+   		if( DUMMY_INSTANCE == this )
+			return JarInfo.class.getSimpleName()+"{ dummy instance }";
 		
 		String path = StringUtils.replaceOnce(this.path, this.baseDir.getAbsolutePath(), "@");
 
 		StringBuilder sb = new StringBuilder(JarInfo.class.getSimpleName());
-      if( this.virtual ) sb.append( "?" );
+      	if( this.virtual )
+      		sb.append( "?" );
       
-      sb.append("{ ")
-      .append( StringUtils.defaultString(this.group, "-"))
-      .append(" : ")
-      .append(this.name);
+		sb.append("{ ")
+		.append( StringUtils.defaultString(this.group, "-"))
+		.append(" : ")
+		.append(this.name);
 
-      if( this.classifier != null && this.classifier.length() != 0 )
-         sb.append(" @").append(this.classifier);
+		if( this.classifier != null && this.classifier.length() != 0 )
+			 sb.append(" @").append(this.classifier);
 
-      sb.append(" : ")
-      .append(this.version)
-      .append(" : ")
-      .append(this.packaging)
-      .append(", fn: ")
-      .append(this.fileName)
-      .append(", pth: ")
-      .append(path)
-      .append(", base: ")
-      .append( baseDir == null ? "" : StringUtils.right( baseDir.getPath(), 30) )
-      .append(" }");
-      
-      return sb.toString();
+		sb.append(" : ")
+			.append(this.version)
+			.append(" : ")
+			.append(this.packaging)
+			.append(", fn: ")
+			.append(this.fileName)
+			.append(", pth: ")
+			.append(path)
+			.append(", base: ")
+			.append( baseDir == null ? "" : StringUtils.right( baseDir.getPath(), 30) )
+			.append(" }");
+
+		return sb.toString();
 	}
 
    
@@ -84,33 +84,33 @@ public class JarInfo implements Comparable {
 		String path = StringUtils.replaceOnce(this.path, this.baseDir.getAbsolutePath(), "@");
 
 		StringBuilder sb = new StringBuilder(JarInfo.class.getSimpleName());
-      if( this.virtual ) sb.append( "?" );
+      	if( this.virtual ) sb.append( "?" );
 
-      sb.append("{ grp: ")
-      .append( StringUtils.defaultString(this.group, "-"))
-      .append(", name: ")
-      .append(this.name);
+		sb.append("{ grp: ")
+			.append( StringUtils.defaultString(this.group, "-"))
+			.append(", name: ")
+			.append(this.name);
 
-      if( this.classifier != null && this.classifier.length() != 0 )
-         sb.append(" @").append(this.classifier);
+		if( this.classifier != null && this.classifier.length() != 0 )
+			sb.append(" @").append(this.classifier);
 
-      sb.append(", ver: ")
-      .append(this.version)
-      .append(", fileName: ")
-      .append(this.fileName)
-      .append(", pack: ")
-      .append(this.packaging)
-      .append(", path: ")
-      .append(path)
-      .append(", base: ")
-      .append( baseDir == null ? "-" : baseDir.getPath() )
-      .append(" }");
+		sb.append(", ver: ")
+			.append(this.version)
+			.append(", fileName: ")
+			.append(this.fileName)
+			.append(", pack: ")
+			.append(this.packaging)
+			.append(", path: ")
+			.append(path)
+			.append(", base: ")
+			.append( baseDir == null ? "-" : baseDir.getPath() )
+			.append(" }");
 
-      return sb.toString();
+      	return sb.toString();
 	}
 
 
-  // <editor-fold defaultstate="collapsed" desc="get / set">
+  	// <editor-fold defaultstate="collapsed" desc="get / set">
 	public String getGroup() {		return group;	}
 	public void setGroup(String group) {		this.group = group;	}
 	public String getName() {		return name;	}
@@ -125,11 +125,11 @@ public class JarInfo implements Comparable {
 	public void setBaseDir(File baseDir) {		this.baseDir = baseDir;	}
 	public String getPackaging() {		return packaging;	}
 	public void setPackaging(String packaging) {		this.packaging = packaging;	}
-   public boolean isVirtual() {      return virtual;   }
-   public void setVirtual(boolean virtual) {      this.virtual = virtual;   }
-   public String getClassifier() {      return classifier;   }
-   public void setClassifier(String classifier) {      this.classifier = classifier;   }
-   // </editor-fold>
+	public boolean isVirtual() {      return virtual;   }
+	public void setVirtual(boolean virtual) {      this.virtual = virtual;   }
+	public String getClassifier() {      return classifier;   }
+	public void setClassifier(String classifier) {      this.classifier = classifier;   }
+	// </editor-fold>
 
 	
 	//@Override

@@ -1,4 +1,3 @@
-
 package org.jboss.qa.mavenhoe;
 
 /**
@@ -7,7 +6,7 @@ package org.jboss.qa.mavenhoe;
  */
 public abstract class Thief<T> {
 
-   T loot;
+   private T loot;
 
    public T steal( T val ){ this.conceal(val); return val; }
    public abstract void conceal( T val );
