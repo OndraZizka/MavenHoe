@@ -100,25 +100,20 @@ To use MavenHoe as a repository to provide project dependencies, do the followin
 
 Run Mavenhoe:
 
-    wget 
-    java -jar Mavenhoe.jar 
+    wget http://download.jboss.org/wildfly/11.0.0.Final/wildfly-11.0.0.Final.zip -o wildfly.zip
+    unzip wildfly.zip
+    java -jar Mavenhoe.jar wildfly-*/
 
 and try:
 
   * http://localhost:17283/status – Will list all indexed jars.
   * http://localhost:17283/jars?mvnPath=org/jboss/whatever/whatever/5.1.0.GA/whatever-5.1.0.GA.jar – Should give 404
   * http://localhost:17283/jars?mvnPath=org/jboss/whatever/hibernate-core/3.3.2.GA_CP03/hibernate-core-3.3.2.GA_CP03.jar – Should let you download the hibernate-core-3.3.2.GA_CP03.jar
-  * http://localhost:17283/jars?mvnPath=foo/revolver/5.1.0.GA/foobar-5.1.0.GA.jar
-    * Note how Mavenhoe (cur.ver.) only cares about the artifact name part of the Maven-style path, revolver.
-       Should let you download the resolver.jar
-       Also note that it looks for the best match. That's because the name in the product may differ from the Maven artifact name.
-    * “Best match” removed, didn't provide good results.
-    * Currently, it's an OR combination of
-        1. FileBasedMapper – see the mapping file above
-        2. ArtifactIdMapper – looks for <artifactId>.jar .
-    * This is a subject to become configurable in some simple way
+  * http://localhost:17283/jars?mvnPath=foo/revolver/5.1.0.GA/foobar-5.1.0.GA.jar - Should let you download the resolver.jar
+      * Note how Mavenhoe (cur.ver.) only cares about the artifact name part of the Maven-style path, revolver.
+      * Also note that it looks for the best match. That's because the name in the zip may differ from the Maven artifact name. Therefore, for "revolver", MavenHoe gives you the `resolver` artifact.
 
- * http://localhost:17283/shutdown – Shuts the server down.
+  * http://localhost:17283/shutdown – Shuts the server down.
 
 ## Sample log output:
 
