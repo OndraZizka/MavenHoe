@@ -13,7 +13,7 @@ Which file will be server is determined by match of strings in the provided Mave
 
 ### Configuration
 
-Prepare a mapping file, see e.g. extracted-metadata.txt.zip attached to https://docspace.corp.redhat.com/docs/DOC-53554 :
+Prepare a mapping file (see e.g. extracted-metadata.txt.zip in the sources) :
 
 
     jboss-managed.jar      org/jboss/man/             jboss-managed      2.1.0.SP1     jboss-managed-2.1.0.SP1.jar
@@ -22,16 +22,14 @@ Prepare a mapping file, see e.g. extracted-metadata.txt.zip attached to https://
     jboss-logging-spi.jar  org/jboss/logging/         jboss-logging-spi  2.1.0.GA      jboss-logging-spi-2.1.0.GA.jar
     ...
 
-
-The first column is the `filename` in the `.zip`; Then `groupId` (with either slashes or dots), `artifactId`, `version`, and `artifact file name`, respectively.
+The first column is the `filename` in the `.zip`; Then `groupId` (with either slashes or dots), `artifactId`, `version`, and `artifact file name`, respectively. This file maps these metadata (when requested) to the particular file.
 
 This file can be prepared e.g. from the local `~/.m2/repository`:
 
     cd ~/.m2/repository && find org/some/groupId -name *.jar | sed -E 's#(.*)/([^/]+)/([^/]+)/([^/]+\.jar)#\4 \1 \2 \3 \4#' > /tmp/list && cd -
+    
+Also, Maven Appassembler plugin is capable of doing such lists when building the zip.
 
-You're expected to check the first column against the `.zip` file.
-
-This is a temporary solution, later this info will be acquired from an online database.
 
 ## Maven project preparation
 
