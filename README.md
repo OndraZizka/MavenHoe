@@ -33,19 +33,19 @@ This is a temporary solution, later this info will be acquired from an online da
 
 * Disable the central repository; see http://community.jboss.org/thread/89912 . One (IMO the best) option is to override it in pom.xml:
 
-    <repository>
-      <id>central</id>
-      <url>http://some.url</url>
-      <snapshots><enabled>false</enabled></snapshots>
-      <releases><enabled>false</enabled></releases>
-    </repository>
+      <repository>
+          <id>central</id>
+          <url>http://some.url</url>
+          <snapshots><enabled>false</enabled></snapshots>
+          <releases><enabled>false</enabled></releases>
+      </repository>
 
 * Add this to your .pom:
 
-    <repository>
-        <id>mavenhoe-repo</id>
-        <url>http://localhost:17283/jars?mvnPath=</url>
-    </repository>
+      <repository>
+          <id>mavenhoe-repo</id>
+          <url>http://localhost:17283/jars?mvnPath=</url>
+      </repository>
 
 * Alternatively, you can also add the repo to ~/.m2/settings.xml (or any path and use mvn -s settings-local.xml):
 
