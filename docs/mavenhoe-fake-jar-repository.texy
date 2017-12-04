@@ -151,13 +151,13 @@ http://localhost:17283/shutdown
 **Sample log output:**
 
 /--code plain .[brush:]
-DEBUG org.jboss.qa.mavenhoe.mappers.OrMapper   Looking for: jdom:jdom:1.0 = jdom-1.0.jar
-DEBUG org.jboss.qa.mavenhoe.mappers.FileBasedMapper   Looking for: jdom:jdom:1.0 = jdom-1.0.jar
-DEBUG org.jboss.qa.mavenhoe.mappers.FileBasedMapper     Thus  for: 'jdom:jdom'
-DEBUG org.jboss.qa.mavenhoe.mappers.FileBasedMapper     Supposed file name: null
-DEBUG org.jboss.qa.mavenhoe.mappers.ArtifactIdMapper   Looking for: jdom:jdom:1.0:jar = jdom-1.0.jar
-DEBUG org.jboss.qa.mavenhoe.mappers.ArtifactIdMapper     Supposed file name: jdom
-DEBUG org.jboss.qa.mavenhoe.MavenHoeApp
+DEBUG OrMapper   Looking for: jdom:jdom:1.0 = jdom-1.0.jar
+DEBUG FileBasedMapper   Looking for: jdom:jdom:1.0 = jdom-1.0.jar
+DEBUG FileBasedMapper     Thus  for: 'jdom:jdom'
+DEBUG FileBasedMapper     Supposed file name: null
+DEBUG ArtifactIdMapper   Looking for: jdom:jdom:1.0:jar = jdom-1.0.jar
+DEBUG ArtifactIdMapper     Supposed file name: jdom
+DEBUG MavenHoeApp
   Found: JarInfo{ name: jdom, version: 5.1.0 (build: SVNTag=JBPAPP_5_1_0 date=201009150028),
      group: null,
      path: eap/jboss-eap-5.1/jboss-as/server/deploy/admin-console.war/WEB-INF/lib/jdom.jar

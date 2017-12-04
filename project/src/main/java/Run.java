@@ -1,5 +1,5 @@
 
-import org.jboss.qa.mavenhoe.MavenHoeApp;
+import cz.oz.mavenhoe.MavenHoeApp;
 
 
 /**

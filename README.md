@@ -95,10 +95,10 @@ and try:
 
 ## Sample log output:
 
-    DEBUG org.jboss.qa.mavenhoe.mappers.OrMapper   Looking for: jdom:jdom:1.0 = jdom-1.0.jar
-    DEBUG org.jboss.qa.mavenhoe.mappers.FileBasedMapper   Looking for: jdom:jdom:1.0 = jdom-1.0.jar
-    DEBUG org.jboss.qa.mavenhoe.mappers.FileBasedMapper     Thus  for: 'jdom:jdom'
-    DEBUG org.jboss.qa.mavenhoe.mappers.FileBasedMapper     Supposed file name: null
-    DEBUG org.jboss.qa.mavenhoe.mappers.ArtifactIdMapper   Looking for: jdom:jdom:1.0:jar = jdom-1.0.jar
-    DEBUG org.jboss.qa.mavenhoe.mappers.ArtifactIdMapper     Supposed file name: jdom
+    DEBUG OrMapper   Looking for: jdom:jdom:1.0 = jdom-1.0.jar
+    DEBUG FileBasedMapper   Looking for: jdom:jdom:1.0 = jdom-1.0.jar
+    DEBUG FileBasedMapper     Thus  for: 'jdom:jdom'
+    DEBUG FileBasedMapper     Supposed file name: null
+    DEBUG ArtifactIdMapper   Looking for: jdom:jdom:1.0:jar = jdom-1.0.jar
+    DEBUG ArtifactIdMapper     Supposed file name: jdom
     DEBUG org.jboss
