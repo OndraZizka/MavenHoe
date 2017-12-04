@@ -25,6 +25,10 @@ Prepare a mapping file, see e.g. extracted-metadata.txt.zip attached to https://
 
 The first column is the `filename` in the `.zip`; Then `groupId` (with either slashes or dots), `artifactId`, `version`, and `artifact file name`, respectively.
 
+This file can be prepared e.g. from the local `~/.m2/repository`:
+
+    cd ~/.m2/repository && find org/some/groupId -name *.jar | sed -E 's#(.*)/([^/]+)/([^/]+)/([^/]+\.jar)#\1 \2 \3 \4#' > /tmp/list && cd -
+
 You're expected to check the first column against the `.zip` file.
 
 This is a temporary solution, later this info will be acquired from an online database.
