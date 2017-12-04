@@ -140,4 +140,3 @@ public class JarInfo implements Comparable {
 	}
 	
 }
-

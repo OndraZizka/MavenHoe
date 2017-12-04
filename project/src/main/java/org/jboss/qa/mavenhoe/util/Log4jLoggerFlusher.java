@@ -27,39 +27,39 @@ public class Log4jLoggerFlusher {
 		}
 	}
 
-	
-		
+
 	public static void flushLoggers() {
 
 		Set<FileAppender> flushedFileAppenders = new HashSet<FileAppender>();
 
 		Enumeration currentLoggers = LogManager.getCurrentLoggers();
 		while( currentLoggers.hasMoreElements() ) {
-				Object nextLogger = currentLoggers.nextElement();
-				if( ! ( nextLogger instanceof Logger )) continue;
+			Object nextLogger = currentLoggers.nextElement();
+			if( ! ( nextLogger instanceof Logger )) continue;
 
-				Logger currentLogger = (Logger) nextLogger;
-				Enumeration allAppenders = currentLogger.getAllAppenders();
-				while( allAppenders.hasMoreElements() )	{
-						Object nextElement = allAppenders.nextElement();
-						if( ! ( nextElement instanceof FileAppender )) continue;
+			Logger currentLogger = (Logger) nextLogger;
+			Enumeration allAppenders = currentLogger.getAllAppenders();
+			while( allAppenders.hasMoreElements() )	{
+				Object nextElement = allAppenders.nextElement();
+				if( ! ( nextElement instanceof FileAppender )) continue;
 
-						FileAppender fileAppender = (FileAppender) nextElement;
-						if( flushedFileAppenders.contains(fileAppender) )
-							continue;
-					  else flushedFileAppenders.add(fileAppender);
+				FileAppender fileAppender = (FileAppender) nextElement;
+				if( flushedFileAppenders.contains(fileAppender) )
+					continue;
+			    else
+			    	flushedFileAppenders.add(fileAppender);
 
-						if( ! fileAppender.getImmediateFlush() )	{
-								//log.info("Appender "+fileAppender.getName()+" is not doing immediateFlush ");
-								fileAppender.setImmediateFlush(true);
-								currentLogger.info(".");
-								fileAppender.setImmediateFlush(false);
-						}
-						else{
-								//log.info("fileAppender"+fileAppender.getName()+" is doing immediateFlush");
-						}
-				}// while
-		}// while
+				if( ! fileAppender.getImmediateFlush() )	{
+                    //log.info("Appender "+fileAppender.getName()+" is not doing immediateFlush ");
+                    fileAppender.setImmediateFlush(true);
+                    currentLogger.info(".");
+                    fileAppender.setImmediateFlush(false);
+				}
+				else{
+                    //log.info("fileAppender"+fileAppender.getName()+" is doing immediateFlush");
+				}
+			}
+		}
 
 	}// flushLoggers()
 

@@ -38,14 +38,13 @@ public class FileBasedMapper implements IMavenAxisToJarInfoMapper
 	private Map<String,String> fileNameByGAP = new HashMap();
 	private Map<String,String> fileNameByAP = new HashMap();
 
-   // Globally strip paths from the jar path defined in the mapping file?
-   // TODO: Use MappingFileDictate.isStriPaths() instead, which is per file, not global.
+    // Globally strip paths from the jar path defined in the mapping file?
+    // TODO: Use MappingFileDictate.isStriPaths() instead, which is per file, not global.
 	private boolean stripPaths;
 
-   private boolean ignoreNonExistent = true;
+    private boolean ignoreNonExistent = true;
 
 	
-
 	public FileBasedMapper( JarIndex jarIndex, List<MappingFilePrecept> mappingFiles, Options options ) throws MavenhoeException {
 		this.jarIndex = jarIndex;
 		this.stripPaths = options.isStripPaths();
@@ -61,7 +60,6 @@ public class FileBasedMapper implements IMavenAxisToJarInfoMapper
 	}
 
 
-
 	/**
 	 * Parses the file and stores a mapping from [groupId:]artifactId -> fileNameInZip.
     *
@@ -72,105 +70,106 @@ public class FileBasedMapper implements IMavenAxisToJarInfoMapper
 	 */
 	private void parseMappingFile( MappingFilePrecept mapping ) throws IOException
 	{
-		log.debug("Parsing mapping file: "+mapping.getFile().getPath() + ( this.stripPaths ? " (with stripping)" : "" ) );
+        log.debug("Parsing mapping file: "+mapping.getFile().getPath() + ( this.stripPaths ? " (with stripping)" : "" ) );
 
-		List<String> lines = FileUtils.readLines(mapping.getFile(), "UTF-8");
-		Collections.sort(lines);
-		
-		for( String line : lines ){
+        List<String> lines = FileUtils.readLines(mapping.getFile(), "UTF-8");
+        Collections.sort(lines);
 
-			line = line.trim();
-			if( "".equals( line ) )       continue;  // Empty.
-			if( line.startsWith("#"))     continue;  // #
+        for( String line : lines ){
 
-			// <fileNameInZip> <groupId> <artifactId> [@<classifier>] <version> <artifactFile>
-			String[] parts = StringUtils.split(line, ' ');
-			if( parts.length < 5 ){
-				log.warn("Invalid line in ["+mapping.getFile( ).getPath()+"]: " + line);
-				continue;
-			}
+            line = line.trim();
+            if( "".equals( line ) )       continue;  // Empty.
+            if( line.startsWith("#"))     continue;  // #
 
-			String fileNameInZip = parts[0];
-			String groupId       = parts[1];
-			String artifactId    = parts[2];
-         String classifier    = null;
-         String classifierStr = "-";
-         int clsOffset = 0;
-         if( parts[3].startsWith("@") ){
-            classifier = classifierStr = parts[3].substring(1);
-            clsOffset = 1;
-            if( parts.length < 6 ){
-               log.error("Line should contain 6 tokens when having @classifier; ignoring. ["+mapping.getFile( ).getPath()+"]: " + line);
-               log.info("   <fileNameInZip> <groupId> <artifactId> [@<classifier>] <version> <artifactFile>");
-               continue;
+            // <fileNameInZip> <groupId> <artifactId> [@<classifier>] <version> <artifactFile>
+            String[] parts = StringUtils.split(line, ' ');
+            if( parts.length < 5 ){
+                log.warn("Invalid line in ["+mapping.getFile( ).getPath()+"]: " + line);
+                continue;
             }
-         }
-			String version       = parts[3 + clsOffset];
-			String artifactFile  = parts[4 + clsOffset];
 
-			groupId = StringUtils.stripEnd(groupId, "/").replace('/', '.');
+            String fileNameInZip = parts[0];
+            String groupId       = parts[1];
+            String artifactId    = parts[2];
+            String classifier    = null;
+            String classifierStr = "-";
+            int clsOffset = 0;
+            if( parts[3].startsWith("@") ){
+                classifier = classifierStr = parts[3].substring(1);
+                clsOffset = 1;
+                if( parts.length < 6 ){
+                    log.error("Line should contain 6 tokens when having @classifier; ignoring. ["+mapping.getFile( ).getPath()+"]: " + line);
+                    log.info("   <fileNameInZip> <groupId> <artifactId> [@<classifier>] <version> <artifactFile>");
+                    continue;
+                }
+            }
+            String version       = parts[3 + clsOffset];
+            String artifactFile  = parts[4 + clsOffset];
 
-
-         // Special var for index lookup - we preserve the whole path, strip when resolving.
-         String fileNameInZip_forIndex = fileNameInZip;
-         String fileNameInZip_stripped = new File( fileNameInZip ).getName();
-			if( this.stripPaths ){
-            fileNameInZip_forIndex = fileNameInZip_stripped;
-         }
-
-         // Optionally check if the fileNameInZip exists. If not, skip.
-         JarInfo jarInfo = jarIndex.getByFileNameMap().get( fileNameInZip_forIndex );
-         if( null == jarInfo ){
-            log.warn("    Mapped file not found in index - " + (this.ignoreNonExistent ? "will be ignored: " : "may cause HTTP 409 errors: ") + fileNameInZip_forIndex );
-            if( this.ignoreNonExistent )
-               continue;
-         }
-
-
-			// CONSIDER: Is it ok to rely on the suffix?
-			String packaging = StringUtils.substringAfterLast( fileNameInZip_stripped, "." );
-			if( "".equals(packaging) ){  log.warn("File name without suffix in '{}': {}", new Object[]{ mapping.getFile( ), fileNameInZip }); }
-
-			log.debug( String.format("  Adding to map: %s <- %s:%s:%s:%s:%s  %s", fileNameInZip,  groupId, artifactId, classifierStr, version, packaging, artifactFile));
-         
-			String prev;
-         String key;
-
-         prev = this.fileNameByGACVP.put( key = groupId+":"+artifactId+":"+classifierStr+":"+version+":"+packaging, fileNameInZip );
-         if( null != prev )  log.warn("    Duplicate key for GACVP map: "+key);
-
-         prev = this.fileNameByGAVP.put( key = groupId+":"+artifactId+":"+version+":"+packaging, fileNameInZip );
-         if( null != prev )  log.warn("    Duplicate key for GAVP map: "+key);
-
-         prev = this.fileNameByGAP .put( key = groupId+":"+artifactId+":"            +packaging, fileNameInZip );
-         if( null != prev )  log.warn("    Duplicate key for GAP  map: "+key);
-
-         prev = this.fileNameByAP  .put( key =             artifactId+":"            +packaging, fileNameInZip );
-         if( null != prev )  log.warn("    Duplicate key for  AP  map: "+key);
+            groupId = StringUtils.stripEnd(groupId, "/").replace('/', '.');
 
 
-         // Serve fake poms for jars?  See the -fakepoms  param.
-         if( mapping.isFakePoms() && "jar".equals( packaging ) ){
+            // Special var for index lookup - we preserve the whole path, strip when resolving.
+            String fileNameInZip_forIndex = fileNameInZip;
+            String fileNameInZip_stripped = new File( fileNameInZip ).getName();
+            if( this.stripPaths ) {
+                fileNameInZip_forIndex = fileNameInZip_stripped;
+            }
 
-            String pomFileName = StringUtils.removeEnd( fileNameInZip, ".jar" ) + ".pom";
+            // Optionally check if the fileNameInZip exists. If not, skip.
+            JarInfo jarInfo = jarIndex.getByFileNameMap().get( fileNameInZip_forIndex );
+            if( null == jarInfo ){
+                log.warn("    Mapped file not found in index - " + (this.ignoreNonExistent ? "will be ignored: " : "may cause HTTP 409 errors: ") + fileNameInZip_forIndex );
+                if( this.ignoreNonExistent )
+                   continue;
+            }
 
-            log.debug( String.format("    Adding fake .pom: %s <- %s:%s:%s:%s:%s  %s", pomFileName,  groupId, artifactId, classifierStr, version, packaging, ""));
 
-            prev = this.fileNameByGACVP.put( groupId+":"+artifactId+":"+classifierStr+":"+version+":pom", pomFileName );
+            // CONSIDER: Is it ok to rely on the suffix?
+            String packaging = StringUtils.substringAfterLast( fileNameInZip_stripped, "." );
+            if( "".equals(packaging) ){
+                log.warn("File name without suffix in '{}': {}", new Object[]{ mapping.getFile( ), fileNameInZip });
+            }
+
+            log.debug( String.format("  Adding to map: %s <- %s:%s:%s:%s:%s  %s", fileNameInZip,  groupId, artifactId, classifierStr, version, packaging, artifactFile));
+
+            String prev;
+            String key;
+
+            prev = this.fileNameByGACVP.put( key = groupId+":"+artifactId+":"+classifierStr+":"+version+":"+packaging, fileNameInZip );
             if( null != prev )  log.warn("    Duplicate key for GACVP map: "+key);
 
-            prev = this.fileNameByGAVP.put( groupId+":"+artifactId+":"+version+":pom", pomFileName );
+            prev = this.fileNameByGAVP.put( key = groupId+":"+artifactId+":"+version+":"+packaging, fileNameInZip );
             if( null != prev )  log.warn("    Duplicate key for GAVP map: "+key);
 
-            prev = this.fileNameByGAP.put(  groupId+":"+artifactId            +":pom", pomFileName );
+            prev = this.fileNameByGAP .put( key = groupId+":"+artifactId+":"            +packaging, fileNameInZip );
             if( null != prev )  log.warn("    Duplicate key for GAP  map: "+key);
 
-            prev = this.fileNameByAP.put(               artifactId            +":pom", pomFileName );
+            prev = this.fileNameByAP  .put( key =             artifactId+":"            +packaging, fileNameInZip );
             if( null != prev )  log.warn("    Duplicate key for  AP  map: "+key);
-         }
 
-		}
-	}
+
+            // Serve fake poms for jars?  See the -fakepoms  param.
+            if( mapping.isFakePoms() && "jar".equals( packaging ) )
+            {
+                String pomFileName = StringUtils.removeEnd( fileNameInZip, ".jar" ) + ".pom";
+
+                log.debug( String.format("    Adding fake .pom: %s <- %s:%s:%s:%s:%s  %s", pomFileName,  groupId, artifactId, classifierStr, version, packaging, ""));
+
+                prev = this.fileNameByGACVP.put( groupId+":"+artifactId+":"+classifierStr+":"+version+":pom", pomFileName );
+                if( null != prev )  log.warn("    Duplicate key for GACVP map: "+key);
+
+                prev = this.fileNameByGAVP.put( groupId+":"+artifactId+":"+version+":pom", pomFileName );
+                if( null != prev )  log.warn("    Duplicate key for GAVP map: "+key);
+
+                prev = this.fileNameByGAP.put(  groupId+":"+artifactId            +":pom", pomFileName );
+                if( null != prev )  log.warn("    Duplicate key for GAP  map: "+key);
+
+                prev = this.fileNameByAP.put(               artifactId            +":pom", pomFileName );
+                if( null != prev )  log.warn("    Duplicate key for  AP  map: "+key);
+            }
+        }
+    }
 
 
 
@@ -188,7 +187,7 @@ public class FileBasedMapper implements IMavenAxisToJarInfoMapper
 	//@Override
 	public JarInfo find( String group, String artifact, String classifier, String version, String fileName, String packaging ) throws MetadataReffersToNonExistentFileMavenhoeException
 	{
-      String clsStr = StringUtils.defaultString(classifier, JarInfo.NULL_CLASSIFIER_STR);
+        String clsStr = StringUtils.defaultString(classifier, JarInfo.NULL_CLASSIFIER_STR);
 		log.debug( String.format("  Looking for: %s : %s @%s : %s : %s / %s ", group, artifact, clsStr, version, packaging, fileName));
 		String try1_GACVP = group + ":" + artifact + ":" + clsStr + ":" + version + ":" + packaging;
 		String try1_GAVP  = group + ":" + artifact + ":"                + version + ":" + packaging;
@@ -200,8 +199,8 @@ public class FileBasedMapper implements IMavenAxisToJarInfoMapper
 
 		// Try G:A:V:P second.
 		if( null == supposedFileNameInZip ){
-         supposedFileNameInZip = this.fileNameByGAVP.get( try1_GAVP );
-      }
+            supposedFileNameInZip = this.fileNameByGAVP.get( try1_GAVP );
+        }
 
 		// Fallback to only G:A:P
 		if( null == supposedFileNameInZip ){
@@ -214,7 +213,7 @@ public class FileBasedMapper implements IMavenAxisToJarInfoMapper
 
 
 		// Strip path to a base name.
-      // TODO: Change to mapping.isStripPaths().
+        // TODO: Change to mapping.isStripPaths().
 		log.trace( "    Supposed file name: " + supposedFileNameInZip + ( this.stripPaths ? " (+ to be stripped)" : "") );
 		if( this.stripPaths )
 			//supposedFileNameInZip = StringUtils.substringAfterLast( supposedFileNameInZip, "/");
@@ -231,53 +230,49 @@ public class FileBasedMapper implements IMavenAxisToJarInfoMapper
 	}
 
 
-
-
-	@Override
-	public String toString() {
+    @Override
+    public String toString() {
 		return this.getClass().getSimpleName() + "{ "+ this.getFile() + " }";
 	}
 
 
-	private String getFile() {
-		return "TODO: Keep metadata file path.";
-	}
+    private String getFile() {
+        return "TODO: Keep metadata file path.";
+    }
 
 
-
-
-   // <editor-fold defaultstate="collapsed" desc="get/set">
-   public boolean isIgnoreNonExistent() {
+    // <editor-fold defaultstate="collapsed" desc="get/set">
+    public boolean isIgnoreNonExistent() {
       return ignoreNonExistent;
-   }
+    }
 
-   public FileBasedMapper setIgnoreNonExistent( boolean ignoreNonExistent ) {
-      this.ignoreNonExistent = ignoreNonExistent;
-      return this;
-   }
+    public FileBasedMapper setIgnoreNonExistent( boolean ignoreNonExistent ) {
+        this.ignoreNonExistent = ignoreNonExistent;
+        return this;
+    }
 
-   public boolean isStripPaths() {
+    public boolean isStripPaths() {
       return stripPaths;
-   }
+    }
 
-   public FileBasedMapper setStripPaths( boolean stripPaths ) {
-      this.stripPaths = stripPaths;
-      return this;
-   }
+    public FileBasedMapper setStripPaths( boolean stripPaths ) {
+        this.stripPaths = stripPaths;
+        return this;
+    }
 
-   public Map<String, String> getMapFileNameByAP() {
+    public Map<String, String> getMapFileNameByAP() {
       return Collections.unmodifiableMap( fileNameByAP );
-   }
+    }
 
-   public Map<String, String> getMapFileNameByGAP() {
+    public Map<String, String> getMapFileNameByGAP() {
       return Collections.unmodifiableMap( fileNameByGAP );
-   }
+    }
 
-   public Map<String, String> getFileNameByGAVPMap() {
+    public Map<String, String> getFileNameByGAVPMap() {
       return Collections.unmodifiableMap( fileNameByGAVP );
-   }
-   
-   // </editor-fold>
+    }
+
+    // </editor-fold>
 
 
 }// class

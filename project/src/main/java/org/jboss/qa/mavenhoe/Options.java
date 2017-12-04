@@ -22,13 +22,13 @@ public class Options {
 
 
     public Options( String mappingFilePath ) {
-          this.mappings = new ArrayList();
-          this.mappings.add( new MappingFilePrecept( new File( mappingFilePath ) ) );
+        this.mappings = new ArrayList();
+        this.mappings.add( new MappingFilePrecept( new File( mappingFilePath ) ) );
     }
 
     private Options( List<MappingFilePrecept> mappingFilesPaths, List<InclExclItem> inclExclList ) {
-          this.mappings = mappingFilesPaths;
-          this.inclExclList = inclExclList;
+        this.mappings = mappingFilesPaths;
+        this.inclExclList = inclExclList;
     }
 
 

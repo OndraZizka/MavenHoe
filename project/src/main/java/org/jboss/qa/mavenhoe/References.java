@@ -8,13 +8,13 @@ import org.jboss.qa.mavenhoe.mappers.FileBasedMapper;
  */
 public class References {
 
-   private FileBasedMapper fileBasedMapper;
+    private FileBasedMapper fileBasedMapper;
 
-   public FileBasedMapper getFileBasedMapper() {
+    public FileBasedMapper getFileBasedMapper() {
       return fileBasedMapper;
-   }
+    }
 
-   public void setFileBasedMapper(FileBasedMapper fileBasedMapper) {
+    public void setFileBasedMapper(FileBasedMapper fileBasedMapper) {
       this.fileBasedMapper = fileBasedMapper;
    }
 
