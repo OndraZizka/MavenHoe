@@ -27,7 +27,13 @@ import org.slf4j.LoggerFactory;
 public class MavenHoeApp {
     private static final Logger log = LoggerFactory.getLogger(MavenHoeApp.class);
 
-    private static final String CMD_LINE_USAGE = "mavenhoe (-map <mapping-file> | -i (-fakepoms)? <dir-tree-with-jars> | -ipom <dir-tree-with-poms> )+";
+    private static final String CMD_LINE_USAGE =
+            "  mavenhoe (-map <mapping-file> | -i (-fakepoms)? <dir-tree-with-jars> | -ipom <dir-tree-with-poms> )+\n" +
+            "  where " +
+            "      * <mapping-file> is an explicit G:A:V to file mapping text file (see documentation);\n" +
+            "      * <dir-tree-with-jars> is a dir with .jar files to serve, -fakepoms will serve made-up pom.xml files;\n" +
+            "      * <dir-tree-with-poms> is a dir with pom.xml's from which the metadata can be taken.\n\n" +
+            "  At least one must be present. They supplement each other.";
 
     private JarIndex jarIndex;
 
@@ -67,7 +73,7 @@ public class MavenHoeApp {
             options = Options.createFromParams(args);
         } catch (MavenhoeException ex) {
             System.err.println("  " + ex.getMessage());
-            System.err.println("\n  Usage: " + CMD_LINE_USAGE + "\n");
+            System.err.println("\n  Usage:\n" + CMD_LINE_USAGE + "\n");
             return 1;
         }
 
