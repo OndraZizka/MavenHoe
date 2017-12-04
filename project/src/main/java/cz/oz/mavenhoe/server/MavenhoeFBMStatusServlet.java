@@ -71,4 +71,4 @@ public class MavenhoeFBMStatusServlet extends HttpServlet
 	}
 
 
-}// class
+}

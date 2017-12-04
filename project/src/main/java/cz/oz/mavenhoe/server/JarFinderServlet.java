@@ -272,4 +272,4 @@ public class JarFinderServlet extends HttpServlet
 	}// dispatchFakePom()
 
 
-}// class
+}

@@ -65,4 +65,4 @@ public class MavenhoeJarIndexStatusServlet extends HttpServlet
 	}
 
 
-}// class
+}

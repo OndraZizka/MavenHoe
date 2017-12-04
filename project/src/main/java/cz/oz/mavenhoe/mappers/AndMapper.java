@@ -47,4 +47,4 @@ public class AndMapper implements IMavenAxisToJarInfoMapper {
 
 
 
-}// class
+}

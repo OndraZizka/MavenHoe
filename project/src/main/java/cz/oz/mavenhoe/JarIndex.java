@@ -159,7 +159,6 @@ public class JarIndex
 
 
 
-
     synchronized
     public void addJarInfo( JarInfo info ){
         this.jars.add(info);
@@ -335,4 +334,4 @@ public class JarIndex
     // </editor-fold>
 
 	
-}// class
+}

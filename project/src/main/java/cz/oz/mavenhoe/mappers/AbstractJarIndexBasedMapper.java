@@ -18,4 +18,4 @@ public abstract class AbstractJarIndexBasedMapper implements IMavenAxisToJarInfo
 	
 
 
-}// class
+}

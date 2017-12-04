@@ -11,4 +11,4 @@ public abstract class Thief<T> {
     public abstract void conceal( T val );
     public T sell( ){ return this.loot; }
 
-}// class
+}

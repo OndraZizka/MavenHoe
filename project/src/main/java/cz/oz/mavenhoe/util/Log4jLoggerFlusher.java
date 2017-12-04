@@ -63,4 +63,4 @@ public class Log4jLoggerFlusher {
 
 	}// flushLoggers()
 
-}// class
+}

@@ -168,7 +168,7 @@ public class Options {
         public void setFakePoms(boolean fakePoms) {         this.fakePoms = fakePoms;      }
 
 
-    }// class MappingFileDictate
+    }
 
 
-}// class
+}

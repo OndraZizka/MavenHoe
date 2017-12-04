@@ -42,4 +42,4 @@ public class ArtifactIdMapper extends AbstractJarIndexBasedMapper implements IMa
 	}
 
 
-}// class
+}

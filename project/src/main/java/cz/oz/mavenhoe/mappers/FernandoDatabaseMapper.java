@@ -92,4 +92,4 @@ public class FernandoDatabaseMapper implements IMavenAxisToJarInfoMapper {
 		
 	}// find()
 
-}// class
+}

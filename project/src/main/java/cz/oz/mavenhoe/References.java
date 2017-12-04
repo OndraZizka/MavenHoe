@@ -18,4 +18,4 @@ public class References {
       this.fileBasedMapper = fileBasedMapper;
    }
 
-}// class
+}

@@ -51,4 +51,4 @@ public class ArtifactIdSimilarityMapper extends AbstractJarIndexBasedMapper impl
 
 	}
 
-}// class
+}

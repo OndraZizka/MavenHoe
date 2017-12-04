@@ -283,7 +283,6 @@ public class JarFinderServletTest {
    public void testDispatchFakePom() throws Exception {
       System.out.println("dispatchFakePom");
 
-
       JarInfo requestedArtifact = new JarInfo("postgresql", "8.2-510", "org.postgresql",
               "/postgresql/postgresql/8.2-510/postgresql-8.2-510.pom", "postgresql-8.2-510.pom", null, "pom");
 
@@ -343,10 +342,8 @@ public class JarFinderServletTest {
       InputStream pomIS = JarFinderServlet.class.getClassLoader().getResourceAsStream( POM_XML_RESOURCE_PATH );
       String referenceResultPom = IOUtils.toString(pomIS);
       assertEquals( referenceResultPom, resultPom );
-      
-
    }
-}// class
+}
 
 
 
@@ -365,7 +362,6 @@ class MyServletOutputStream extends ServletOutputStream {
    public MyServletOutputStream() {
       this.out = System.out;
    }
-
 
    // <editor-fold defaultstate="collapsed" desc="overrides">
    public void write(byte[] buf, int off, int len) {

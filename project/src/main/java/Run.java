@@ -12,4 +12,4 @@ public class Run {
 		MavenHoeApp.main(args);
 	}
 
-}// class
+}

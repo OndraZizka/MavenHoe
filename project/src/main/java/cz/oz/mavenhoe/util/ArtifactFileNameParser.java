@@ -32,4 +32,4 @@ public class ArtifactFileNameParser {
         return new JarInfo( name, version, null, null, fileName, null, mat.group(5) );
     }
 
-}// class
+}

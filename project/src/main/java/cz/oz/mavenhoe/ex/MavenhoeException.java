@@ -22,4 +22,4 @@ public class MavenhoeException extends Exception {
 	public MavenhoeException() {
 	}
 
-}// class
+}

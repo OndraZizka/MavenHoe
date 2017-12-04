@@ -108,4 +108,4 @@ public class PomParser
 		return val;
 	}
 
-}// class
+}

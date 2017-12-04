@@ -13,4 +13,4 @@ public interface IMavenAxisToJarInfoMapper {
 
 	JarInfo find(String group, String artifact, String classifier, String version, String fileName, String packaging ) throws MavenhoeException;
 
-}// class
+}

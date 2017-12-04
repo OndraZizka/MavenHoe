@@ -51,4 +51,4 @@ public class OrMapper implements IMavenAxisToJarInfoMapper {
 
 
 
-}// class
+}

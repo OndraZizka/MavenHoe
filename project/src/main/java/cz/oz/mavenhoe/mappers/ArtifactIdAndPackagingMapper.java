@@ -45,4 +45,4 @@ public class ArtifactIdAndPackagingMapper extends AbstractJarIndexBasedMapper im
 	}
 
 
-}// class
+}

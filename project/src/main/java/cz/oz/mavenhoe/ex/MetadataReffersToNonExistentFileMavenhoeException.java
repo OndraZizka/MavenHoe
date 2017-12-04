@@ -11,4 +11,4 @@ public class MetadataReffersToNonExistentFileMavenhoeException extends MavenhoeE
 		super(supposedFileNameInZip);
 	}
 
-}// class
+}

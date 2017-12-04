@@ -34,4 +34,4 @@ class InclExclItem
 		return "InclExclItem{ " + mode + " " + type + " " + path + " " + fakePoms + " }";
 	}
 
-}// class
+}
