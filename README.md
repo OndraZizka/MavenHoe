@@ -3,11 +3,11 @@
 
 ## Purpose
 
-QA dept often needs to run a maven project with “faked” dependencies – the actual .jar files must be taken from a product's distribution, which are not in any Maven repository (like EAP's .zip or RPM distribution).
+QA dept often needs to run a maven project with “faked” dependencies – the actual .jar files must be taken from a product's distribution, which are not in any Maven repository (like EAP's `.zip` or RPM distribution).
 
-This utility is one of the ways to solve this problem. It scans a given directory for .jar files, indexes them, and opens a server acting as a Maven repository, in the sense of serving the indexed .jar files.
+This utility is one of the ways to solve this problem. It scans a given directory for .jar files, indexes them, and opens a server acting as a Maven repository, in the sense of serving the indexed `.jar` files.
 
-Which file will be server is determined by match of strings in the provided Maven URL path (localhost:17283/<group>/<artifact>/<version>/<filename>.jar). This algorithm is a matter of future improvement. Using static mapping file is a possibility.
+Which file will be server is determined by match of strings in the provided Maven URL path (`localhost:17283/<group>/<artifact>/<version>/<filename>.jar`). This algorithm is a matter of future improvement. Using static mapping file is a possibility.
 
 ## Usage
 
@@ -23,15 +23,15 @@ Prepare a mapping file, see e.g. extracted-metadata.txt.zip attached to https://
     ...
 
 
-The first column is the filename in the .zip; Then groupId (with either slashes or dots), artifactId, version, artifact file name, respectively.
+The first column is the `filename` in the `.zip`; Then `groupId` (with either slashes or dots), `artifactId`, `version`, and `artifact file name`, respectively.
 
-You're expected to check the first column against the .zip file.
+You're expected to check the first column against the `.zip` file.
 
 This is a temporary solution, later this info will be acquired from an online database.
 
 ## Maven project preparation
 
-* Disable the central repository; see http://community.jboss.org/thread/89912 . One (IMO the best) option is to override it in pom.xml:
+* Disable the central repository; see http://community.jboss.org/thread/89912 . One (IMO the best) option is to override it in `pom.xml`:
 
       <repository>
           <id>central</id>
@@ -47,10 +47,10 @@ This is a temporary solution, later this info will be acquired from an online da
           <url>http://localhost:17283/jars?mvnPath=</url>
       </repository>
 
-* Alternatively, you can also add the repo to ~/.m2/settings.xml (or any path and use mvn -s settings-local.xml):
+* Alternatively, you can also add the repo to `~/.m2/settings.xml` (or any path and use `mvn -s settings-local.xml`):
 
-    <?xml version="1.0" encoding="UTF-8"?>
-    <settings>
+      <?xml version="1.0" encoding="UTF-8"?>
+      <settings>
 
       <localRepository>/home/ondra/work/hbn/runner/EAP-5.1/work-space/m2repo</localRepository>
 
@@ -68,7 +68,7 @@ This is a temporary solution, later this info will be acquired from an online da
         </profile>
       </profiles>
 
-    </settings>
+      </settings>
 
 ## Tryout / debugging
 
